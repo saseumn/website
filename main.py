@@ -2,8 +2,11 @@ from flask import Flask
 from config import Config
 
 
-def make_app(config):
+def make_app(config=None):
     """ Returns a Flask object ready to serve the website. """
+
+    if not config:
+        config = Config()
 
     # Create a Flask app object.
     app = Flask(__name__)
