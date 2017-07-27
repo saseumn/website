@@ -1,0 +1,9 @@
+# Visual Studio Code
+.vscode/settings.json
+
+# Python Virtual Environment
+.virtualenv
+
+# Python-generated Files
+__pycache__
+*.pyc
