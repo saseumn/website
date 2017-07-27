@@ -1,0 +1,19 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "taskName": "Run Migrations",
+            "command": "${config:python.pythonPath}",
+            "args": [
+                "${workspaceRoot}/manage.py",
+                "db",
+                "upgrade"
+            ],
+            "options": {
+                "env": {
+                    "DATABASE_URL": "sqlite:///${workspaceRoot}/sase.db"
+                }
+            }
+        }
+    ]
+}
