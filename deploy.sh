@@ -17,4 +17,5 @@ source .virtualenv/bin/activate
 pip install -r requirements.txt
 
 # Run gunicorn.
+killall gunicorn
 gunicorn -w $WORKERS -b "$HOST:$PORT" "main:make_app()" &
