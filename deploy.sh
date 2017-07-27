@@ -17,4 +17,5 @@ source .virtualenv/bin/activate
 pip install -r requirements.txt
 
 # Restart circus.
+killall chaussette || true
 circusctl restart
