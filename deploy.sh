@@ -18,4 +18,4 @@ pip install -r requirements.txt
 
 # Run gunicorn.
 killall gunicorn || true
-gunicorn -w $WORKERS -b "$HOST:$PORT" "main:make_app()" &
+bash -c 'gunicorn -w $WORKERS -b "$HOST:$PORT" "main:make_app()" &'
