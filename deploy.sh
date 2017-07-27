@@ -17,4 +17,4 @@ source .virtualenv/bin/activate
 pip install -r requirements.txt
 
 # Run gunicorn.
-gunicorn -w $WORKERS -b "$HOST:$PORT"
+gunicorn -w $WORKERS -b "$HOST:$PORT" &
