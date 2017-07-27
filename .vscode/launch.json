@@ -10,7 +10,8 @@
             "program": "${workspaceRoot}/main.py",
             "cwd": "${workspaceRoot}",
             "env": {
-                "ENVIRONMENT": "development"
+                "ENVIRONMENT": "development",
+                "DATABASE_URL": "sqlite:///${workspaceRoot}/sase.db"
             },
             "debugOptions": [
                 "WaitOnAbnormalExit",

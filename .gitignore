@@ -7,3 +7,6 @@
 # Python-generated Files
 __pycache__
 *.pyc
+
+# Database file.
+sase.db
