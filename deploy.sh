@@ -16,6 +16,5 @@ source .virtualenv/bin/activate
 # Install dependencies.
 pip install -r requirements.txt
 
-# Restart circus.
-killall chaussette || true
-circusctl restart
+# Run server-side deploy script.
+/home/deploy/deploy
