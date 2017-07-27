@@ -19,7 +19,8 @@ def make_app(config=None):
     return app
 
 
+config = Config()
+app = make_app(config)
+
 if __name__ == "__main__":
-    config = Config()
-    app = make_app(config)
     app.run(port=config.port)

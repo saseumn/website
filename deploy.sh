@@ -16,6 +16,5 @@ source .virtualenv/bin/activate
 # Install dependencies.
 pip install -r requirements.txt
 
-# Run gunicorn.
-killall gunicorn || true
-gunicorn -w $WORKERS -b '$HOST:$PORT' 'main:make_app()' &
+# Restart circus.
+circusctl restart
