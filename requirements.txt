@@ -1,4 +1,4 @@
-chaussette
+
 flask
 flask-migrate
 flask-script
@@ -6,3 +6,5 @@ flask-sqlalchemy
 mysqlclient
 passlib
 sqlalchemy
+rauth
+
