@@ -1,8 +1,10 @@
-chaussette
 flask
+flask-login
 flask-migrate
 flask-script
 flask-sqlalchemy
+flask-wtf
 mysqlclient
 passlib
 sqlalchemy
+wtforms
