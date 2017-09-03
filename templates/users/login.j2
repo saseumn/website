@@ -1,4 +1,4 @@
-{% from "templates.j2" import render_field, render_generic_field %}
+{% from "templates.j2" import flashes, render_field, render_generic_field %}
 {% extends "layout.j2" %}
 {% block title %}Login{% endblock %}
 
@@ -14,6 +14,7 @@
                         <div class="list-group">
                             <div class="list-group-item">
                                 <form method="POST">
+                                    {{ flashes() }}
                                     {{ login_form.csrf_token }}
                                     <fieldset>
                                         {{ render_field(login_form.username) }}

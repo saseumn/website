@@ -1,5 +1,6 @@
 import os
 import sys
+import logging
 
 
 class Config(object):
@@ -18,10 +19,12 @@ class Config(object):
 
         # Database URL
         self.SQLALCHEMY_DATABASE_URI = Config.get_database_url()
+        self.SQLALCHEMY_TRACK_MODIFICATIONS = True
 
     @staticmethod
     def get_database_url():
         url = os.getenv("DATABASE_URL")
+
         if not url:
             sys.stderr.write("DATABASE_URL not specified, application is exiting..\n")
             sys.stderr.flush()
@@ -33,6 +36,14 @@ class Config(object):
         key = os.getenv("SECRET_KEY")
         if key:
             return key
-        sys.stderr.write("DATABASE_URL not specified, application is exiting..\n")
+        sys.stderr.write("SECRET_KEY not specified, application is exiting..\n")
         sys.stderr.flush()
         sys.exit(1)
+
+    @staticmethod
+    def get_email_credentials():
+        gmail_username = os.getenv("GMAIL_USERNAME")
+        gmail_password = os.getenv("GMAIL_PASSWORD")
+        if not (gmail_username and gmail_password):
+            return False
+        return (gmail_username, gmail_password)

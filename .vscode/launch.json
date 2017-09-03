@@ -9,10 +9,12 @@
             "pythonPath": "${config:python.pythonPath}",
             "program": "${workspaceRoot}/main.py",
             "cwd": "${workspaceRoot}",
+            // "envFile": ".env",
             "env": {
                 "ENVIRONMENT": "development",
                 "DATABASE_URL": "sqlite:///${workspaceRoot}/sase.db",
-                "SECRET_KEY": "wubba lubba dub dub"
+                "SECRET_KEY": "wubba lubba dub dub",
+                "WERKZEUG_DEBUG_PIN": "off"
             },
             "debugOptions": [
                 "WaitOnAbnormalExit",

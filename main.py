@@ -2,6 +2,9 @@ from flask import Flask
 
 from config import Config
 from ext import login_manager
+from models import db
+import logging
+import sys
 
 
 def make_app(config=None):
@@ -15,6 +18,7 @@ def make_app(config=None):
     app.config.from_object(config)
 
     # Initialize
+    db.init_app(app)
     login_manager.init_app(app)
 
     # Register endpoints.
