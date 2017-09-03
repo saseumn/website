@@ -11,7 +11,8 @@
             "cwd": "${workspaceRoot}",
             "env": {
                 "ENVIRONMENT": "development",
-                "DATABASE_URL": "sqlite:///${workspaceRoot}/sase.db"
+                "DATABASE_URL": "sqlite:///${workspaceRoot}/sase.db",
+                "SECRET_KEY": "wubba lubba dub dub"
             },
             "debugOptions": [
                 "WaitOnAbnormalExit",

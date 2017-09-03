@@ -1,10 +1,11 @@
-
 flask
+flask-login
 flask-migrate
 flask-script
 flask-sqlalchemy
+flask-wtf
 mysqlclient
 passlib
 sqlalchemy
 rauth
-
+wtforms

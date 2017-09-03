@@ -1,0 +1,47 @@
+{% macro flashes() %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category or 'info' }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+{% endmacro %}
+
+{% macro show_breadcrumbs(breadcrumbs) %}
+    <ol class="breadcrumb container">
+        {% for breadcrumb in breadcrumbs %}
+            <li{{ ' class = "active"' | safe if loop.last }}><a href="{{ breadcrumb.url }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+    </ol>
+{% endmacro %}
+
+{% macro render_field(field) %}
+    <div class="form-group">
+        {{ field.label(class_="control-label") }}
+        {{ field(class_="form-control", autocomplete="off", **kwargs.get("options", {})) }}
+        {% if field.errors %}
+            <p style="color: #F00;">
+                {% for error in field.errors %}
+                    {{ error }}<br/>
+                {% endfor %}
+            </p>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro render_generic_field(field) %}
+    <div class="form-group">
+        {{ field.label(class_="control-label") }}
+        {{ field(autocomplete="off") }}
+        {% if field.errors %}
+            <p style="color: #F00;">
+                {% for error in field.errors %}
+                    {{ error }}<br/>
+                {% endfor %}
+            </p>
+        {% endif %}
+    </div>
+{% endmacro %}
