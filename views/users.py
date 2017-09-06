@@ -9,7 +9,7 @@ import string
 from datetime import datetime, timedelta
 
 from flask import Blueprint, abort, flash, redirect, render_template, url_for
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 from flask_wtf import FlaskForm
 from sqlalchemy import func, or_
 from wtforms import ValidationError
@@ -121,9 +121,32 @@ def profile(id=None):
     return render_template("users/profile.j2", user=user)
 
 
-@blueprint.route("/settings")
+@blueprint.route("/settings", methods=["GET", "POST"])
+@login_required
 def settings():
-    return "Settings"
+    change_password_form = ChangePasswordForm(prefix="change-password")
+    profile_edit_form = ProfileEditForm(prefix="profile-edit")
+    if change_password_form.validate_on_submit() and change_password_form.submit.data:
+        current_user.password = change_password_form.password.data
+        db.session.add(current_user)
+        db.session.commit()
+        flash("Password changed.", "success")
+        return redirect(url_for("users.settings"))
+    if profile_edit_form.validate_on_submit() and profile_edit_form.submit.data:
+        for field in profile_edit_form:
+            if hasattr(current_user, field.short_name):
+                setattr(current_user, field.short_name, field.data)
+        db.session.add(current_user)
+        db.session.commit()
+        flash("Profile updated.", "success")
+        return redirect(url_for("users.settings"))
+    else:
+        for field in profile_edit_form:
+            if hasattr(current_user, field.short_name):
+                field.data = getattr(current_user, field.short_name, "")
+    return render_template("users/settings.j2",
+                           change_password_form=change_password_form,
+                           profile_edit_form=profile_edit_form)
 
 
 @blueprint.route("/verify/<token>")
@@ -168,6 +191,22 @@ def send_verification_email(username, email, link):
         username=username,
     )
     send_email(email, subject, body)
+
+
+class ProfileEditForm(FlaskForm):
+    name = StringField("Name", validators=[InputRequired("Please enter a name.")])
+    submit = SubmitField("Update Profile")
+
+
+class ChangePasswordForm(FlaskForm):
+    old_password = PasswordField("Old Password", validators=[InputRequired("Please enter your old password.")])
+    password = PasswordField("Password", validators=[InputRequired("Please enter a password.")])
+    confirm_password = PasswordField("Confirm Password", validators=[InputRequired("Please confirm your password."), EqualTo("password", "Please enter the same password.")])
+    submit = SubmitField("Update Password")
+
+    def validate_old_password(self, field):
+        if not current_user.check_password(field.data):
+            raise ValidationError("Old password doesn't match.")
 
 
 class LoginForm(FlaskForm):
