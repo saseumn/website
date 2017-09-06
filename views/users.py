@@ -44,7 +44,8 @@ def login():
     if login_form.validate_on_submit():
         user = login_form.get_user()
         if not user.admin and not user.email_verified:
-            flash("You haven't activated your account yet! Check your email for an activation email.", "danger")
+            flash(
+                "You haven't activated your account yet! Check your email for an activation email.", "danger")
             return redirect(url_for("users.login"))
         login_user(user)
         flash("Successfully logged in!", "success")
@@ -61,6 +62,8 @@ def logout():
 
 @blueprint.route("/register", methods=["GET", "POST"])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for("base.index"))
     register_form = RegisterForm(prefix="register")
     if register_form.validate_on_submit():
         new_user = register_user(register_form.name.data,
@@ -77,9 +80,15 @@ def register():
 def forgot():
     return "Forgot"
 
+
 @blueprint.route("/profile")
 def profile():
     return "Profile"
+
+
+@blueprint.route("/settings")
+def settings():
+    return "Settings"
 
 
 @blueprint.route("/verify/<token>")
@@ -102,13 +111,15 @@ def verify(token):
 
 
 def register_user(name, email, username, password, admin=False, **kwargs):
-    new_user = User(name=name, username=username, password=password, email=email, admin=admin)
+    new_user = User(name=name, username=username,
+                    password=password, email=email, admin=admin)
 
     for key, value in kwargs.items():
         setattr(new_user, key, value)
     code = random_string()
     new_user.email_verification_token = code
-    send_verification_email(username, email, url_for("users.verify", token=code, _external=True))
+    send_verification_email(username, email, url_for(
+        "users.verify", token=code, _external=True))
     db.session.add(new_user)
     db.session.commit()
 
@@ -125,13 +136,16 @@ def send_verification_email(username, email, link):
 
 
 class LoginForm(FlaskForm):
-    username = StringField("Username", validators=[InputRequired("Please enter your username.")])
-    password = PasswordField("Password", validators=[InputRequired("Please enter your password.")])
+    username = StringField("Username", validators=[
+                           InputRequired("Please enter your username.")])
+    password = PasswordField("Password", validators=[
+                             InputRequired("Please enter your password.")])
     remember = BooleanField("Remember Me")
     submit = SubmitField("Login")
 
     def get_user(self):
-        query = User.query.filter(func.lower(User.username) == self.username.data.lower())
+        query = User.query.filter(func.lower(
+            User.username) == self.username.data.lower())
         return query.first()
 
     def validate_username(self, field):
@@ -147,16 +161,22 @@ class LoginForm(FlaskForm):
 
 
 class RegisterForm(FlaskForm):
-    name = StringField("Name", validators=[InputRequired("Please enter a name.")])
-    username = StringField("Username", validators=[InputRequired("Please enter a username."), Length(3, 24, "Your username must be between 3 and 24 characters long.")])
-    email = StringField("Email", validators=[InputRequired("Please enter an email."), Email("Please enter a valid email.")])
-    password = PasswordField("Password", validators=[InputRequired("Please enter a password.")])
-    confirm_password = PasswordField("Confirm Password", validators=[InputRequired("Please confirm your password."), EqualTo("password", "Please enter the same password.")])
+    name = StringField("Name", validators=[
+                       InputRequired("Please enter a name.")])
+    username = StringField("Username", validators=[InputRequired("Please enter a username."), Length(
+        3, 24, "Your username must be between 3 and 24 characters long.")])
+    email = StringField("Email", validators=[InputRequired(
+        "Please enter an email."), Email("Please enter a valid email.")])
+    password = PasswordField("Password", validators=[
+                             InputRequired("Please enter a password.")])
+    confirm_password = PasswordField("Confirm Password", validators=[InputRequired(
+        "Please confirm your password."), EqualTo("password", "Please enter the same password.")])
     submit = SubmitField("Register")
 
     def validate_username(self, field):
         if not VALID_USERNAME.match(field.data):
-            raise ValidationError("Username must be contain letters, numbers, or _, and not start with a number.")
+            raise ValidationError(
+                "Username must be contain letters, numbers, or _, and not start with a number.")
         if User.query.filter(func.lower(User.username) == field.data.lower()).count():
             raise ValidationError("Username is taken.")
 

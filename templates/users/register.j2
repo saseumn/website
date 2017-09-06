@@ -1,4 +1,4 @@
-{% from "templates.j2" import flashes, render_field, render_generic_field %}
+{% from "templates.j2" import render_field, render_generic_field %}
 {% extends "layout.j2" %}
 {% block title %}Register{% endblock %}
 
@@ -13,7 +13,6 @@
                         </div>
                         <div class="list-group">
                             <div class="list-group-item">
-                                {{ flashes() }}
                                 <form method="POST">
                                     {{ register_form.csrf_token }}
                                     <fieldset>
