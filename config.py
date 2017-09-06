@@ -26,7 +26,8 @@ class Config(object):
         url = os.getenv("DATABASE_URL")
 
         if not url:
-            sys.stderr.write("DATABASE_URL not specified, application is exiting..\n")
+            sys.stderr.write(
+                "DATABASE_URL not specified, application is exiting..\n")
             sys.stderr.flush()
             sys.exit(1)
         return url
@@ -36,7 +37,8 @@ class Config(object):
         key = os.getenv("SECRET_KEY")
         if key:
             return key
-        sys.stderr.write("SECRET_KEY not specified, application is exiting..\n")
+        sys.stderr.write(
+            "SECRET_KEY not specified, application is exiting..\n")
         sys.stderr.flush()
         sys.exit(1)
 

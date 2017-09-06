@@ -10,7 +10,7 @@ import string
 from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_login import current_user, login_user, logout_user
 from flask_wtf import FlaskForm
-from sqlalchemy import func
+from sqlalchemy import func, or_
 from wtforms import ValidationError
 from wtforms.fields import (BooleanField, PasswordField, StringField,
                             SubmitField)
@@ -136,16 +136,16 @@ def send_verification_email(username, email, link):
 
 
 class LoginForm(FlaskForm):
-    username = StringField("Username", validators=[
-                           InputRequired("Please enter your username.")])
+    username = StringField("Username or Email", validators=[
+                           InputRequired("Please enter your username or email.")])
     password = PasswordField("Password", validators=[
                              InputRequired("Please enter your password.")])
     remember = BooleanField("Remember Me")
     submit = SubmitField("Login")
 
     def get_user(self):
-        query = User.query.filter(func.lower(
-            User.username) == self.username.data.lower())
+        query = User.query.filter(or_(func.lower(User.username) == self.username.data.lower(),
+                                      func.lower(User.email) == self.username.data.lower()))
         return query.first()
 
     def validate_username(self, field):
