@@ -3,10 +3,28 @@ from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from passlib.hash import bcrypt
 from sqlalchemy.ext.hybrid import hybrid_property
-
+from util import random_string
 from ext import login_manager
 
 db = SQLAlchemy()
+
+
+class PasswordResetToken(db.Model):
+    __tablename__ = 'password_reset_tokens'
+    id = db.Column(db.Integer, primary_key=True)
+    uid = db.Column(db.Integer, db.ForeignKey("users.id"), index=True)
+    active = db.Column(db.Boolean)
+    token = db.Column(db.String(length=16), default=lambda: random_string(length=16))
+    email = db.Column(db.Unicode(length=128))
+    expire = db.Column(db.DateTime)
+
+    @property
+    def expired(self):
+        return datetime.utcnow() >= self.expire
+
+    @property
+    def user(self):
+        return User.get_by_id(self.uid)
 
 
 class User(db.Model):

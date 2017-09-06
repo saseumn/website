@@ -6,8 +6,9 @@
 """
 
 import string
+from datetime import datetime, timedelta
 
-from flask import Blueprint, flash, redirect, render_template, url_for
+from flask import Blueprint, abort, flash, redirect, render_template, url_for
 from flask_login import current_user, login_user, logout_user
 from flask_wtf import FlaskForm
 from sqlalchemy import func, or_
@@ -16,7 +17,7 @@ from wtforms.fields import (BooleanField, PasswordField, StringField,
                             SubmitField)
 from wtforms.validators import Email, EqualTo, InputRequired, Length
 
-from models import User, db
+from models import PasswordResetToken, User, db
 from util import (VALID_USERNAME, get_redirect_target, random_string,
                   redirect_back, send_email)
 
@@ -76,9 +77,37 @@ def register():
     return render_template("users/register.j2", register_form=register_form)
 
 
-@blueprint.route("/forgot")
+@blueprint.route("/password/forgot", methods=["GET", "POST"])
 def forgot():
-    return "Forgot"
+    forgot_form = PasswordForgotForm()
+    if forgot_form.validate_on_submit():
+        if forgot_form.user is not None:
+            token = PasswordResetToken(active=True, uid=forgot_form.user.id, email=forgot_form.email.data, expire=datetime.utcnow() + timedelta(days=1))
+            db.session.add(token)
+            db.session.commit()
+            url = url_for("users.reset", code=token.token, _external=True)
+            send_email(forgot_form.email.data, "SASE UMN Account Password Reset", "Click here to reset your password: %s" % url)
+        flash("If you have an email registered with us, then you should have received an email. Check your inbox now!", "success")
+        return redirect(url_for("users.forgot"))
+    return render_template("users/forgot.j2", forgot_form=forgot_form)
+
+
+@blueprint.route("/password/reset/<string:code>", methods=["GET", "POST"])
+def reset(code):
+    token = PasswordResetToken.query.filter_by(token=code, active=True).first()
+    if not token or token.expired or token.email != token.user.email:
+        abort(404)
+
+    reset_form = PasswordResetForm()
+    if reset_form.validate_on_submit():
+        user = User.get_by_id(token.uid)
+        user.password = reset_form.password.data
+        token.active = False
+        db.session.add(user)
+        db.session.commit()
+        flash("Password has been reset! Try logging in now.", "success")
+        return redirect(url_for("users.login"))
+    return render_template("users/reset.j2", reset_form=reset_form)
 
 
 @blueprint.route("/profile")
@@ -136,10 +165,8 @@ def send_verification_email(username, email, link):
 
 
 class LoginForm(FlaskForm):
-    username = StringField("Username or Email", validators=[
-                           InputRequired("Please enter your username or email.")])
-    password = PasswordField("Password", validators=[
-                             InputRequired("Please enter your password.")])
+    username = StringField("Username or Email", validators=[InputRequired("Please enter your username or email.")])
+    password = PasswordField("Password", validators=[InputRequired("Please enter your password.")])
     remember = BooleanField("Remember Me")
     submit = SubmitField("Login")
 
@@ -161,16 +188,11 @@ class LoginForm(FlaskForm):
 
 
 class RegisterForm(FlaskForm):
-    name = StringField("Name", validators=[
-                       InputRequired("Please enter a name.")])
-    username = StringField("Username", validators=[InputRequired("Please enter a username."), Length(
-        3, 24, "Your username must be between 3 and 24 characters long.")])
-    email = StringField("Email", validators=[InputRequired(
-        "Please enter an email."), Email("Please enter a valid email.")])
-    password = PasswordField("Password", validators=[
-                             InputRequired("Please enter a password.")])
-    confirm_password = PasswordField("Confirm Password", validators=[InputRequired(
-        "Please confirm your password."), EqualTo("password", "Please enter the same password.")])
+    name = StringField("Name", validators=[InputRequired("Please enter a name.")])
+    username = StringField("Username", validators=[InputRequired("Please enter a username."), Length(3, 24, "Your username must be between 3 and 24 characters long.")])
+    email = StringField("Email", validators=[InputRequired("Please enter an email."), Email("Please enter a valid email.")])
+    password = PasswordField("Password", validators=[InputRequired("Please enter a password.")])
+    confirm_password = PasswordField("Confirm Password", validators=[InputRequired("Please confirm your password."), EqualTo("password", "Please enter the same password.")])
     submit = SubmitField("Register")
 
     def validate_username(self, field):
@@ -183,3 +205,26 @@ class RegisterForm(FlaskForm):
     def validate_email(self, field):
         if User.query.filter(func.lower(User.email) == field.data.lower()).count():
             raise ValidationError("Email is taken.")
+
+
+class PasswordForgotForm(FlaskForm):
+    email = StringField("Email", validators=[InputRequired("Please enter your email."), Email("Please enter a valid email.")])
+    submit = SubmitField("Send Recovery Email")
+
+    def __init__(self):
+        super(PasswordForgotForm, self).__init__()
+        self._user = None
+        self._user_cached = False
+
+    @property
+    def user(self):
+        if not self._user_cached:
+            self._user = User.query.filter(func.lower(User.email) == self.email.data.lower()).first()
+            self._user_cached = True
+        return self._user
+
+
+class PasswordResetForm(FlaskForm):
+    password = PasswordField("Password", validators=[InputRequired("Please enter a password.")])
+    confirm_password = PasswordField("Confirm Password", validators=[InputRequired("Please confirm your password."), EqualTo("password", "Please enter the same password.")])
+    submit = SubmitField("Change Password")
