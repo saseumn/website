@@ -96,7 +96,7 @@ def forgot():
 def reset(code):
     token = PasswordResetToken.query.filter_by(token=code, active=True).first()
     if not token or token.expired or token.email != token.user.email:
-        abort(404)
+        redirect(url_for("base.index"))
 
     reset_form = PasswordResetForm()
     if reset_form.validate_on_submit():
@@ -111,8 +111,14 @@ def reset(code):
 
 
 @blueprint.route("/profile")
-def profile():
-    return "Profile"
+@blueprint.route("/profile/<int:id>")
+def profile(id=None):
+    if id is None and current_user.is_authenticated:
+        return redirect(url_for("users.profile", id=current_user.id))
+    user = User.get_by_id(id)
+    if user is None:
+        abort(404)
+    return render_template("users/profile.j2", user=user)
 
 
 @blueprint.route("/settings")

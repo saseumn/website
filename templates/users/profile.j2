@@ -1,0 +1,18 @@
+{% from "templates.j2" import render_field, render_generic_field %}
+{% extends "layout.j2" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <div class="section">
+        <div class="container">
+            <div class="jumbotron">
+                <center>
+                    <h1>{{ user.name }}</h1>
+                    {% if current_user.is_authenticated and current_user.id == user.id %}
+                        <a href="{{ url_for("users.settings") }}" class="btn btn-lg btn-default"><i class="fa fa-fw fa-pencil"></i> Edit Profile</a>
+                    {% endif %}
+                </center>
+            </div>
+        </div>
+    </div>
+{% endblock %}
