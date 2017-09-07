@@ -30,7 +30,8 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="{{ url_for("base.index") }}">Home</a></li>
+                    <li><a href="{{ url_for("base.index") }}">Home</a></li>
+                    <li><a href="{{ url_for("base.events") }}">Events</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_authenticated %}
@@ -40,6 +41,7 @@
                                     Admin&nbsp;<span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="{{ url_for("admin.events") }}"><i class="fa fa-fw fa-calendar"></i> Event Management</a></li>
+                                    <li><a href="{{ url_for("admin.users") }}"><i class="fa fa-fw fa-users"></i> User Management</a></li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="{{ url_for("admin.settings") }}"><i class="fa fa-fw fa-cogs"></i> Settings</a></li>
                                 </ul>

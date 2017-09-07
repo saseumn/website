@@ -18,4 +18,5 @@ def about():
 
 @blueprint.route("/events")
 def events():
-    return "events"
+    eventlist = Event.query.order_by(Event.start_time).all()
+    return render_template("base/events.j2", events=eventlist)

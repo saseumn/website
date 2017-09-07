@@ -18,7 +18,7 @@ class NotReadyForPublishException(Exception):
 @login_required
 @admin_required
 def events():
-    eventlist = Event.query.all()
+    eventlist = Event.query.order_by(Event.start_time).all()
     return render_template("admin/events/index.j2", events=eventlist)
 
 
@@ -33,7 +33,7 @@ def events_new():
         db.session.add(evt)
         db.session.commit()
         flash("Event created!", "success")
-        return redirect(url_for("admin.events"))
+        return redirect(url_for("admin.events_edit", id=evt.id))
     return render_template("admin/events/new.j2", new_event_form=new_event_form)
 
 
@@ -95,6 +95,11 @@ def events_delete(id):
     db.session.commit()
     flash("Event removed.", "success")
     return redirect(url_for("admin.events"))
+
+
+@blueprint.route("/users")
+def users():
+    return render_template("admin/users.j2")
 
 
 @blueprint.route("/settings")
