@@ -59,7 +59,6 @@ def send_email(recipient, subject, body, from_addr="example@exmaple.org"):
     credentials = Config.get_email_credentials()
     if not credentials:
         return
-    logging.error("Debug: Username={}, Password={}".format(*credentials))
     server.login(*credentials)
 
     msg = MIMEMultipart()

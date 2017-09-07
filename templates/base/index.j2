@@ -8,7 +8,10 @@
                 <center style="margin-top:120px; margin-bottom:60px;">
                     <div id="title">
                         <h1>{{ upcoming.name }}</h1>
-                        <h2><i class="fa fa-fw fa-map-marker"></i> {{ upcoming.location }}</h2>
+                        <h2>
+                            <i class="fa fa-fw fa-map-marker"></i> {{ upcoming.location }}<br />
+                            <i class="fa fa-fw fa-calendar"></i> {{ upcoming.start_time.strftime("%B %-d, %Y at %-H:%M %p") }}
+                        </h2>
                     </div>
                 </center>
                 <center>
