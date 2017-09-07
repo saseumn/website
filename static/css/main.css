@@ -154,8 +154,8 @@ h5, .h5 {
 /* all the timeline stuff is ripped straight from https://sydjs.com/meetups  */
 
 .timeline {
-	padding-bottom: 4em;
-	padding-top: 3em;
+	padding-bottom: 1em;
+	padding-top: 1em;
 	position: relative;
 }
 
@@ -224,7 +224,7 @@ h5, .h5 {
     border-radius: .1em;
     color: #555;
     display: block;
-	padding: 1em;
+	padding: 0.75em;
 }
 
 .timeline-item-inner:hover, .timeline-item-inner:focus {
