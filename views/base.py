@@ -1,4 +1,7 @@
+from datetime import datetime, timedelta
+
 from flask import Blueprint, render_template
+from sqlalchemy import and_
 
 from models import Event
 
@@ -18,5 +21,5 @@ def about():
 
 @blueprint.route("/events")
 def events():
-    eventlist = Event.query.filter_by(published=True).order_by(Event.start_time).all()
+    eventlist = Event.query.filter(and_(Event.published == True, Event.start_time < (datetime.now() + timedelta(seconds=1)))).order_by(Event.start_time.desc()).all()
     return render_template("base/events.j2", events=eventlist)
