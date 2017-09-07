@@ -1,0 +1,146 @@
+@import url("https://fonts.googleapis.com/css?family=Catamaran:300,400,700");
+
+html, body {
+	font-family: "Catamaran";
+	font-weight: 300 !important;
+}
+
+h1, h2, h3, h4, h5, h6, .btn {
+	font-weight: 300 !important;
+}
+
+b {
+	font-weight: 700;
+}
+
+#main-content {
+	min-height: 85vh;
+}
+
+#masthead {
+	min-height:40vh;
+	position:relative;
+	margin: 0;
+	margin-top: -21px;
+	padding: 0;
+	
+	background-size: cover;
+	background-position: center;
+}
+
+#masthead > #overlay {
+	background-color: rgba(0, 0, 0, 0.5);
+	padding-top: 34px;
+	padding-bottom: 42px;
+	color: #fff;
+}
+
+#title h1 {
+	font-size: 7em !important;
+}
+
+#title h2 {
+	font-size: 1.5em !important;
+}
+
+#title a {
+	color: rgba(255, 255, 255, 0.6);
+	font-size: 1.2em;
+	text-decoration: none;
+}
+
+.navbar {
+	margin-bottom: 0;
+	border-radius: 0;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+}
+
+.section {
+	padding: 40px 0 60px 0;
+}
+
+#links a {
+	margin: 0 12px 0 12px;
+	color: #555;
+	font-size: 0.75em;
+}
+
+.site-footer {
+	/*margin-top: 90px;*/
+	background-color: #eee;
+	color: #999;
+	padding: 3em 0 0;
+	font-size: 14.3px;
+	position: relative;
+}
+
+.site-footer .footer-heading {
+	color: #555;
+}
+
+.footer-copyright {
+	margin-top: 2em;
+	padding: 2em 2em;
+	border-top: 1px solid rgba(0, 0, 0, 0.1);
+	text-align: center;
+}
+
+.site-footer h5, .site-footer .h5 {
+	font-size: 1.2em;
+}
+
+.container.jumbotron {
+	background-color: transparent;
+}
+
+
+html, body, h1, h2, h3, h4, h5, h6 {
+	font-family: "Catamaran", Arial, sans-serif;
+    font-weight: 300;
+}
+
+.large-text {
+    font-size: 1.6em;
+}
+
+.tab-content {
+    padding: 15px;
+}
+
+.tab-content > .tab-pane {
+    display: none;
+}
+
+.tab-content > .active {
+    display: block;
+}
+
+.site-footer {
+    background-color: #eee;
+    color: #999;
+    padding: 3em 0 0;
+    font-size: 14.3px;
+    position: relative;
+}
+
+.site-footer .footer-heading {
+    color: #555;
+}
+
+.footer-copyright {
+    margin-top: 2em;
+    padding: 2em 2em;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h5, .h5 {
+    font-size: 1.2em;
+}
+
+#links a {
+    margin: 0 12px 0 12px;
+    color: #555;
+    font-size: 0.75em;
+}

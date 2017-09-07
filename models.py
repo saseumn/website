@@ -1,16 +1,23 @@
 from datetime import datetime
 
+from flask import url_for
 from flask_sqlalchemy import SQLAlchemy
 from passlib.hash import bcrypt
 from sqlalchemy.ext.hybrid import hybrid_property
-from util import random_string
+
 from ext import login_manager
+from util import random_string
 
 db = SQLAlchemy()
 
+attendance = db.Table("attendance", db.Model.metadata,
+                      db.Column("user_id", db.Integer, db.ForeignKey("users.id")),
+                      db.Column("event_id", db.Integer, db.ForeignKey("events.id")))
+
 
 class PasswordResetToken(db.Model):
-    __tablename__ = 'password_reset_tokens'
+    __tablename__ = "password_reset_tokens"
+
     id = db.Column(db.Integer, primary_key=True)
     uid = db.Column(db.Integer, db.ForeignKey("users.id"), index=True)
     active = db.Column(db.Boolean)
@@ -25,6 +32,24 @@ class PasswordResetToken(db.Model):
     @property
     def user(self):
         return User.get_by_id(self.uid)
+
+
+class Event(db.Model):
+    __tablename__ = "events"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Unicode(64))
+    location = db.Column(db.Text)
+    description = db.Column(db.Text)
+    published = db.Column(db.Boolean, default=False)
+    start_time = db.Column(db.DateTime)
+    registration_key = db.Column(db.String(32), default=lambda: random_string(length=24))
+
+    attendees = db.relationship("User", secondary=attendance, backref="events")
+
+    @property
+    def registration_link(self):
+        return url_for("users.register", evtkey=self.registration_key, _external=True)
 
 
 class User(db.Model):

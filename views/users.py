@@ -17,7 +17,7 @@ from wtforms.fields import (BooleanField, PasswordField, StringField,
                             SubmitField)
 from wtforms.validators import Email, EqualTo, InputRequired, Length
 
-from models import PasswordResetToken, User, db
+from models import PasswordResetToken, User, db, Event
 from util import (VALID_USERNAME, get_redirect_target, random_string,
                   redirect_back, send_email)
 
@@ -45,8 +45,7 @@ def login():
     if login_form.validate_on_submit():
         user = login_form.get_user()
         if not user.admin and not user.email_verified:
-            flash(
-                "You haven't activated your account yet! Check your email for an activation email.", "danger")
+            flash("You haven't activated your account yet! Check your email for an activation email.", "danger")
             return redirect(url_for("users.login"))
         login_user(user)
         flash("Successfully logged in!", "success")
@@ -62,7 +61,11 @@ def logout():
 
 
 @blueprint.route("/register", methods=["GET", "POST"])
-def register():
+@blueprint.route("/register/<string:evtkey>", methods=["GET", "POST"])
+def register(evtkey=None):
+    event = None
+    if evtkey is not None:
+        event = Event.query.filter_by(registration_key=evtkey).first()
     if current_user.is_authenticated:
         return redirect(url_for("base.index"))
     register_form = RegisterForm(prefix="register")
@@ -74,7 +77,7 @@ def register():
                                  admin=False)
         flash("Check your email for an activation link.", "info")
         return redirect(url_for("users.login"))
-    return render_template("users/register.j2", register_form=register_form)
+    return render_template("users/register.j2", event=event, register_form=register_form)
 
 
 @blueprint.route("/password/forgot", methods=["GET", "POST"])
@@ -140,7 +143,7 @@ def settings():
         db.session.commit()
         flash("Profile updated.", "success")
         return redirect(url_for("users.settings"))
-    else:
+    elif not profile_edit_form.errors:
         for field in profile_edit_form:
             if hasattr(current_user, field.short_name):
                 field.data = getattr(current_user, field.short_name, "")

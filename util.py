@@ -6,11 +6,24 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from urllib.parse import urljoin, urlparse
 
-from flask import redirect, request, url_for
-
+from flask import redirect, request, url_for, abort, flash
+from flask_login import current_user
+from functools import wraps
 from config import Config
 
 VALID_USERNAME = re.compile(r"^[A-Za-z_][A-Za-z\d_]*$")
+
+# decorators
+
+
+def admin_required(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        if not (current_user.is_authenticated and current_user.admin):
+            flash("You don't have permission to view this page.", "danger")
+            return redirect(url_for("base.index"))
+        return f(*args, **kwargs)
+    return wrapper
 
 
 def random_string(length=32, alpha="012346789abcdef"):

@@ -7,8 +7,9 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/yeti/bootstrap.min.css" rel="stylesheet" integrity="sha384-HzUaiJdCTIY/RL2vDPRGdEQHHahjzwoJJzGUkYjHVzTwXFQ2QN/nVgX7tzoMW3Ov" crossorigin="anonymous">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="/static/css/main.css" rel="stylesheet" />
     <title>
-        {% if title %}{{ title }} - {% endif %}SASE UMN
+        {% block title %}{% endblock %} - SASE UMN
     </title>
 </head>
 
@@ -33,6 +34,17 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_authenticated %}
+                        {% if current_user.admin %}
+                            <li class="dropdown">
+                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    Admin&nbsp;<span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="{{ url_for("admin.events") }}"><i class="fa fa-fw fa-calendar"></i> Event Management</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="{{ url_for("admin.settings") }}"><i class="fa fa-fw fa-cogs"></i> Settings</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
                         <li class="dropdown">
                             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 {{ current_user.username }}&nbsp;<span class="caret"></span></a>
@@ -51,20 +63,47 @@
             </div>
         </div>
     </nav>
-    <div class="navbar">
+    <div style="margin-bottom: 21px;">
         {{ flashes() }}
     </div>
     <div style="min-height: 80vh;">
         {% block content %}{% endblock %}
     </div>
-    <div class="container">
-        <hr style="width: 75%;" />
-        <center>
-            <p>
-                &copy; 2017 SASE UMN good shit
-            </p>
-        </center>
-    </div>
+    <footer class="site-footer site-footer--sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h5 class="footer-heading">SASE UMN</h5>
+                    <p></p>
+                    <ul class="list-inline">
+                    </ul>
+                </div>
+                <div class="col-sm-8">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <h5 class="footer-heading">Useful Links</h5>
+                            <ul>
+                                <li><a href="{{ url_for("base.index") }}">About</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-xs-8">
+                            <h5 class="footer-heading">Connect With Us</h5>
+                            <p id="links">
+                                <a href="https://www.facebook.com/sase.umn/" target="_blank" rel="noopener"><i class="fa fa-fw fa-2x fa-facebook-square"></i></a>
+                                <a href="https://twitter.com/sase.umn/" target="_blank" rel="noopener"><i class="fa fa-fw fa-2x fa-twitter"></i></a>
+                                <a href="https://www.instagram.com/saseumn/" target="_blank" rel="noopener"><i class="fa fa-fw fa-2x fa-instagram"></i></a>
+                                <a href="https://www.youtube.com/user/saseumn/" target="_blank" rel="noopener"><i class="fa fa-fw fa-2x fa-youtube-play"></i></a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row footer-copyright">
+                <p>
+                    &copy; 2017 SASE UMN. This website is open-source on <a href="https://github.com/iptq/sase-website" target="_blank">Github</a>.
+                </p>
+            </div>
+    </footer>
     <script src="http://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </body>

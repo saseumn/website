@@ -1,5 +1,42 @@
 {% extends "layout.j2" %}
+{% block title %}Home{% endblock %}
 
 {% block content %}
-
+    {% if upcoming %}
+        <div id="masthead" style="background-image:url(/static/img/background.jpg);">
+            <div id="overlay">
+                <center style="margin-top:120px; margin-bottom:60px;">
+                    <div id="title">
+                        <h1>{{ upcoming.name }}</h1>
+                        <h2><i class="fa fa-fw fa-map-marker"></i> {{ upcoming.location }}</h2>
+                    </div>
+                </center>
+                <center>
+                    <p>
+                        <a href="{{ url_for("base.about") }}" class="btn btn-lg btn-primary">About Us</a>
+                        &nbsp;
+                        <a href="{{ url_for("base.events") }}" class="btn btn-lg btn-success">Upcoming Events &raquo;</a>
+                    </p>
+                </center>
+            </div>
+        </div>
+    {% else %}
+        <div id="masthead" style="background-image:url(/static/img/background.jpg);">
+            <div id="overlay">
+                <center style="margin-top:120px; margin-bottom:60px;">
+                    <div id="title">
+                        <h1>SASE UMN</h1>
+                        <h2>Society of Asian Scientists and Engineers – University of Minnesota</h2>
+                    </div>
+                </center>
+                <center>
+                    <p>
+                        <a href="{{ url_for("base.about") }}" class="btn btn-lg btn-primary">About Us</a>
+                        &nbsp;
+                        <a href="{{ url_for("base.events") }}" class="btn btn-lg btn-success">Upcoming Events &raquo;</a>
+                    </p>
+                </center>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

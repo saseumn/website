@@ -23,6 +23,7 @@ def make_app(config=None):
 
     # Register endpoints.
     import views
+    app.register_blueprint(views.admin.blueprint, url_prefix="/admin")
     app.register_blueprint(views.base.blueprint)
     app.register_blueprint(views.users.blueprint, url_prefix="/users")
 

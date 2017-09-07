@@ -14,7 +14,8 @@
                     "DATABASE_URL": "sqlite:///${workspaceRoot}/sase.db",
                     "SECRET_KEY": "wubba lubba dub dub"
                 }
-            }
+            },
+            "problemMatcher": []
         },
         {
             "taskName": "Run Migrations",
@@ -29,7 +30,8 @@
                     "DATABASE_URL": "sqlite:///${workspaceRoot}/sase.db",
                     "SECRET_KEY": "wubba lubba dub dub"
                 }
-            }
+            },
+            "problemMatcher": []
         }
     ]
 }
