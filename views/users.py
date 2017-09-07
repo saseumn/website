@@ -80,7 +80,10 @@ def register(evtkey=None):
             db.session.add(event)
             db.session.commit()
         flash("Check your email for an activation link.", "info")
-        return redirect(url_for("users.login"))
+        if event:
+            return redirect(url_for("users.register", evtkey=evtkey))
+        else:
+            return redirect(url_for("users.login"))
     return render_template("users/register.j2", event=event, register_form=register_form)
 
 
