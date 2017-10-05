@@ -1,7 +1,5 @@
 # Visual Studio Code
 .vscode/*
-!.vscode/launch.json
-!.vscode/tasks.json
 
 # Python Virtual Environment
 .virtualenv
