@@ -19,6 +19,12 @@ def make_app(config=None):
     app = Flask(__name__)
     app.config.from_object(config)
 
+    @app.after_request
+    def after_request(response):
+        if app.config.get("ENVIRONMENT") == "production":
+            response.headers.update("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
+        return response
+
     # Initialize
     admin.init_app(app)
     db.init_app(app)
