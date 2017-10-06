@@ -38,3 +38,5 @@ def init_security(app, User, Role):
             flag = True
         if flag:
             db.session.commit()
+
+    return security

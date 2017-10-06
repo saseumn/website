@@ -1,7 +1,8 @@
 import logging
 import sys
 
-from flask import Flask
+from flask import Flask, url_for
+from flask_admin import helpers as admin_helpers
 
 from config import Config
 from models import Role, User
@@ -22,11 +23,20 @@ def make_app(config=None):
     admin.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
-    init_security(app, User, Role)
+    security = init_security(app, User, Role)
+
+    @security.context_processor
+    def security_context_processor():
+        return dict(
+            admin_base_template=admin.base_template,
+            admin_view=admin.index_view,
+            h=admin_helpers,
+            get_url=url_for
+        )
 
     # Admin stuff
     import admin as admin_views
-    # admin.add_view(admin_views.GenericModelView(Role, db.session, endpoint="lol"))
+    admin.add_view(admin_views.GenericModelView(Role, db.session))
 
     # Register endpoints.
     import views
