@@ -22,7 +22,7 @@ def make_app(config=None):
     @app.after_request
     def after_request(response):
         if app.config.get("ENVIRONMENT") == "production":
-            response.headers.update("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
+            response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
         return response
 
     # Initialize
