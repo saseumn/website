@@ -1,18 +1,28 @@
 from datetime import datetime
 
 from flask import url_for
-from flask_sqlalchemy import SQLAlchemy
 from passlib.hash import bcrypt
 from sqlalchemy.ext.hybrid import hybrid_property
 
-from ext import login_manager
+from objects import login_manager
+from objects import db
 from util import random_string
-
-db = SQLAlchemy()
 
 attendance = db.Table("attendance", db.Model.metadata,
                       db.Column("user_id", db.Integer, db.ForeignKey("users.id")),
                       db.Column("event_id", db.Integer, db.ForeignKey("events.id")))
+
+roles_users = db.Table("roles_users",
+                       db.Column("user_id", db.Integer(), db.ForeignKey("users.id")),
+                       db.Column("role_id", db.Integer(), db.ForeignKey("roles.id")))
+
+
+class Role(db.Model):
+    __tablename__ = "roles"
+
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(80), unique=True)
+    description = db.Column(db.String(255))
 
 
 class PasswordResetToken(db.Model):
@@ -64,6 +74,7 @@ class User(db.Model):
     email_verification_token = db.Column(db.String(256), index=True)
     _register_time = db.Column("register_time", db.DateTime, default=datetime.now)
     _password = db.Column("password", db.String(256))
+    roles = db.relationship("Role", secondary=roles_users, backref=db.backref("users", lazy="dynamic"))
 
     @hybrid_property
     def password(self):

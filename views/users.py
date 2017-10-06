@@ -1,15 +1,9 @@
-"""
-    users.py
-    ~~~~~~~~
-
-    Responsible for all user-related endpoints.
-"""
-
 import string
 from datetime import datetime, timedelta
 
 from flask import Blueprint, abort, flash, redirect, render_template, url_for
-from flask_login import current_user, login_user, logout_user, login_required
+from flask_login import current_user, login_user, logout_user
+from flask_security import login_required
 from flask_wtf import FlaskForm
 from sqlalchemy import func, or_
 from wtforms import ValidationError
