@@ -2,8 +2,8 @@ import string
 from datetime import datetime, timedelta
 
 from flask import Blueprint, abort, flash, redirect, render_template, url_for
-from flask_login import current_user, login_user, logout_user
-from flask_security import login_required
+from flask_security import (current_user, login_required, login_user,
+                            logout_user)
 from flask_wtf import FlaskForm
 from sqlalchemy import func, or_
 from wtforms import ValidationError
@@ -11,7 +11,7 @@ from wtforms.fields import (BooleanField, PasswordField, StringField,
                             SubmitField)
 from wtforms.validators import Email, EqualTo, InputRequired, Length
 
-from models import PasswordResetToken, User, db, Event
+from models import Event, PasswordResetToken, User, db
 from util import (VALID_USERNAME, get_redirect_target, random_string,
                   redirect_back, send_email)
 

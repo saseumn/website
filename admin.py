@@ -17,4 +17,4 @@ class GenericModelView(ModelView):
             if current_user.is_authenticated:
                 abort(403)
             else:
-                return redirect(url_for("security.login", next=request.url))
+                return redirect(url_for("users.login", next=request.url))

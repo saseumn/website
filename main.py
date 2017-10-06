@@ -30,8 +30,8 @@ def make_app(config=None):
 
     # Register endpoints.
     import views
-    # app.register_blueprint(views.base.blueprint)
-    # app.register_blueprint(views.users.blueprint, url_prefix="/users")
+    app.register_blueprint(views.base.blueprint)
+    app.register_blueprint(views.users.blueprint, url_prefix="/users")
 
     return app
 

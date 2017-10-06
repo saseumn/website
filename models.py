@@ -68,13 +68,17 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Unicode(32))
     username = db.Column(db.String(16), unique=True, index=True)
-    admin = db.Column(db.Boolean, default=False)
+    _admin = db.Column("admin", db.Boolean, default=False)
     email = db.Column(db.String(256), unique=True, index=True)
     email_verified = db.Column(db.Boolean)
     email_verification_token = db.Column(db.String(256), index=True)
     _register_time = db.Column("register_time", db.DateTime, default=datetime.now)
     _password = db.Column("password", db.String(256))
     roles = db.relationship("Role", secondary=roles_users, backref=db.backref("users", lazy="dynamic"))
+
+    @hybrid_property
+    def admin(self):
+        return self._admin
 
     @hybrid_property
     def password(self):
