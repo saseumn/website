@@ -36,7 +36,8 @@ def make_app(config=None):
 
     # Admin stuff
     import admin as admin_views
-    admin.add_view(admin_views.GenericModelView(Role, db.session))
+    admin.add_view(admin_views.RoleView(db.session))
+    admin.add_view(admin_views.UserView(db.session))
 
     # Register endpoints.
     import views
@@ -46,8 +47,7 @@ def make_app(config=None):
     return app
 
 
-config = Config()
-app = make_app(config)
-
 if __name__ == "__main__":
+    config = Config()
+    app = make_app(config)
     app.run(port=config.port)

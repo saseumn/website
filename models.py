@@ -3,6 +3,7 @@ from datetime import datetime
 from flask import url_for
 from passlib.hash import bcrypt
 from sqlalchemy.ext.hybrid import hybrid_property
+from flask_security import UserMixin, RoleMixin
 
 from objects import login_manager
 from objects import db
@@ -17,12 +18,15 @@ roles_users = db.Table("roles_users",
                        db.Column("role_id", db.Integer(), db.ForeignKey("roles.id")))
 
 
-class Role(db.Model):
+class Role(db.Model, RoleMixin):
     __tablename__ = "roles"
 
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
+
+    def __str__(self):
+        return self.name
 
 
 class PasswordResetToken(db.Model):
@@ -62,7 +66,7 @@ class Event(db.Model):
         return url_for("users.register", evtkey=self.registration_key, _external=True)
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)

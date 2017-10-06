@@ -21,5 +21,5 @@ def about():
 
 @blueprint.route("/events")
 def events():
-    eventlist = Event.query.filter(and_(Event.published == True, Event.start_time < (datetime.now() + timedelta(seconds=1)))).order_by(Event.start_time.desc()).all()
+    eventlist = Event.query.filter(and_(Event.published is True, Event.start_time < (datetime.now() + timedelta(seconds=1)))).order_by(Event.start_time.desc()).all()
     return render_template("base/events.j2", events=eventlist)
