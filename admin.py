@@ -2,16 +2,14 @@ from flask import abort, redirect, request, url_for
 from flask_admin.contrib.sqla import ModelView
 from flask_security import current_user
 
-from models import Role, User
+from models import Event, Role, User
 
 
 class GenericView(ModelView):
     def is_accessible(self):
         if not current_user.is_active or not current_user.is_authenticated:
             return False
-        if current_user.admin:
-            return True
-        if current_user.has_role("superuser"):
+        if current_user.admin or current_user.has_role("superuser"):
             return True
         return False
 
@@ -26,6 +24,11 @@ class GenericView(ModelView):
 class RoleView(GenericView):
     def __init__(self, session):
         super().__init__(Role, session)
+
+
+class EventView(GenericView):
+    def __init__(self, session):
+        super().__init__(Event, session)
 
 
 class UserView(GenericView):

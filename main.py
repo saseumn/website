@@ -37,6 +37,7 @@ def make_app(config=None):
     # Admin stuff
     import admin as admin_views
     admin.add_view(admin_views.RoleView(db.session))
+    admin.add_view(admin_views.EventView(db.session))
     admin.add_view(admin_views.UserView(db.session))
 
     # Register endpoints.
