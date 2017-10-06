@@ -24,19 +24,19 @@ def init_security(app, User, Role):
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
     security = Security(app, user_datastore)
 
-    with app.app_context():
-        admin_role = Role.query.filter_by(name="admin").first()
-        flag = False
-        if not admin_role:
-            admin_role = Role(name="admin", description="Site Administrator")
-            db.session.add(admin_role)
-            flag = True
-        board_role = Role.query.filter_by(name="board").first()
-        if not board_role:
-            board_role = Role(name="board", description="SASE UMN Board Member")
-            db.session.add(board_role)
-            flag = True
-        if flag:
-            db.session.commit()
+    # with app.app_context():
+    #     admin_role = Role.query.filter_by(name="admin").first()
+    #     flag = False
+    #     if not admin_role:
+    #         admin_role = Role(name="admin", description="Site Administrator")
+    #         db.session.add(admin_role)
+    #         flag = True
+    #     board_role = Role.query.filter_by(name="board").first()
+    #     if not board_role:
+    #         board_role = Role(name="board", description="SASE UMN Board Member")
+    #         db.session.add(board_role)
+    #         flag = True
+    #     if flag:
+    #         db.session.commit()
 
     return security
