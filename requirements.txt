@@ -1,8 +1,10 @@
 bcrypt
 flask
+flask-admin
 flask-login
 flask-migrate
 flask-script
+flask-security
 flask-sqlalchemy
 flask-wtf
 mysqlclient

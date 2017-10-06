@@ -8,9 +8,10 @@ class Config(object):
 
     def __init__(self):
         # ENVIRONMENT = { development | testing | production }
-        self.ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
+        self.ENVIRONMENT = os.getenv("ENVIRONMENT", "production")  # secure by defualt
         if self.ENVIRONMENT.lower() == "development":
             self.DEBUG = True
+            self.TEMPLATES_AUTO_RELOAD = True
 
         self.port = int(os.getenv("PORT", "7400"))
 
@@ -20,6 +21,9 @@ class Config(object):
         # Database URL
         self.SQLALCHEMY_DATABASE_URI = Config.get_database_url()
         self.SQLALCHEMY_TRACK_MODIFICATIONS = True
+
+        # Flask-Admin
+        self.SECURITY_URL_PREFIX = os.getenv("SECURITY_URL_PREFIX", "/admin")
 
     @staticmethod
     def get_database_url():
