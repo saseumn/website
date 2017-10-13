@@ -16,7 +16,7 @@ def index():
 
 @blueprint.route("/about")
 def about():
-    return "about"
+    return render_template("base/about.j2")
 
 
 @blueprint.route("/events")
