@@ -1,7 +1,8 @@
 import string
 from datetime import datetime, timedelta
 
-from flask import Blueprint, abort, flash, redirect, render_template, url_for
+from flask import (Blueprint, abort, current_app, flash, redirect,
+                   render_template, url_for)
 from flask_security import (current_user, login_required, login_user,
                             logout_user)
 from flask_wtf import FlaskForm
@@ -26,7 +27,7 @@ your email client didn't render a link).
 $link
 
 Thanks!
-SASE UMN Webmasters
+SASE UMN Webmaster
 """
 
 
@@ -38,9 +39,10 @@ def login():
     login_form = LoginForm(remember=True)
     if login_form.validate_on_submit():
         user = login_form.get_user()
-        if not user.admin and not user.email_verified:
-            flash("You haven't activated your account yet! Check your email for an activation email.", "danger")
-            return redirect(url_for("users.login"))
+        if not user.admin:
+            if not current_app.config.get("EMAIL_VERIFICATION_DISABLED", False) and not user.email_verified:
+                flash("You haven't activated your account yet! Check your email for an activation email.", "danger")
+                return redirect(url_for("users.login"))
         login_user(user)
         flash("Successfully logged in!", "success")
         return redirect_back("base.index")
@@ -180,8 +182,8 @@ def register_user(name, email, username, password, admin=False, **kwargs):
         setattr(new_user, key, value)
     code = random_string()
     new_user.email_verification_token = code
-    send_verification_email(username, email, url_for(
-        "users.verify", token=code, _external=True))
+    if not current_app.config.get("EMAIL_VERIFICATION_DISABLED", False):
+        send_verification_email(username, email, url_for("users.verify", token=code, _external=True))
     db.session.add(new_user)
     db.session.commit()
 

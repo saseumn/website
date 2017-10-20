@@ -5,12 +5,14 @@ from flask_security import current_user
 
 from models import Event, Role, User
 
+superuser_role = "Webmaster"
+
 
 class SecuredHomeView(AdminIndexView):
     def is_accessible(self):
         if not current_user.is_active or not current_user.is_authenticated:
             return False
-        if current_user.admin or current_user.has_role("superuser"):
+        if current_user.admin or current_user.has_role(superuser_role):
             return True
         return False
 
@@ -23,7 +25,7 @@ class GenericView(ModelView):
     def is_accessible(self):
         if not current_user.is_active or not current_user.is_authenticated:
             return False
-        if current_user.admin or current_user.has_role("superuser"):
+        if current_user.admin or current_user.has_role(superuser_role):
             return True
         return False
 

@@ -11,6 +11,7 @@ class Config(object):
         self.ENVIRONMENT = os.getenv("ENVIRONMENT", "production")  # secure by defualt
         if self.ENVIRONMENT.lower() == "development":
             self.DEBUG = True
+            self.EMAIL_VERIFICATION_DISABLED = True
             self.TEMPLATES_AUTO_RELOAD = True
 
         self.port = int(os.getenv("PORT", "7400"))
