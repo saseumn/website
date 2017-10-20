@@ -10,7 +10,7 @@ blueprint = Blueprint("base", __name__)
 
 @blueprint.route("/")
 def index():
-    upcoming = Event.query.filter_by(published=True).order_by(Event.start_time).first()
+    upcoming = Event.query.filter(and_(Event.published == True, Event.start_time > datetime.now())).order_by(Event.start_time).first()
     return render_template("base/index.j2", upcoming=upcoming)
 
 
@@ -21,8 +21,8 @@ def about():
 
 @blueprint.route("/events")
 def events():
-    next_event = Event.query.filter(and_(Event.published == True, Event.start_time > datetime.now())).order_by(Event.start_time).first()
+    upcoming = Event.query.filter(and_(Event.published == True, Event.start_time > datetime.now())).order_by(Event.start_time).first()
     eventlist = Event.query.filter(and_(Event.published == True, Event.start_time < datetime.now())).order_by(Event.start_time.desc()).all()
-    if next_event:
-        eventlist.insert(0, next_event)
+    if upcoming:
+        eventlist.insert(0, upcoming)
     return render_template("base/events.j2", events=eventlist)
