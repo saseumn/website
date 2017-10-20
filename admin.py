@@ -1,8 +1,18 @@
 from flask import abort, redirect, request, url_for
+from flask_admin import AdminIndexView, expose
 from flask_admin.contrib.sqla import ModelView
 from flask_security import current_user
 
 from models import Event, Role, User
+
+
+class SecuredHomeView(AdminIndexView):
+    def is_accessible(self):
+        if not current_user.is_active or not current_user.is_authenticated:
+            return False
+        if current_user.admin or current_user.has_role("superuser"):
+            return True
+        return False
 
 
 class GenericView(ModelView):

@@ -4,6 +4,7 @@ import sys
 from flask import Flask, url_for
 from flask_admin import helpers as admin_helpers
 
+from admin import SecuredHomeView
 from config import Config
 from models import Role, User
 from objects import admin, db, init_security, login_manager
@@ -26,7 +27,7 @@ def make_app(config=None):
         return response
 
     # Initialize
-    admin.init_app(app)
+    admin.init_app(app, index_view=SecuredHomeView(url="/admin"))
     db.init_app(app)
     login_manager.init_app(app)
     security = init_security(app, User, Role)
