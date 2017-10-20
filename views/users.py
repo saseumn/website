@@ -174,7 +174,7 @@ def verify(token):
 
 def register_user(name, email, username, password, admin=False, **kwargs):
     new_user = User(name=name, username=username,
-                    password=password, email=email, admin=admin)
+                    password=password, email=email)
 
     for key, value in kwargs.items():
         setattr(new_user, key, value)
