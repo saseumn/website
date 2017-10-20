@@ -7,6 +7,7 @@ flask-script
 flask-security
 flask-sqlalchemy
 flask-wtf
+google-api-python-client
 mysqlclient
 passlib
 sqlalchemy

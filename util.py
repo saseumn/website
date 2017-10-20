@@ -4,11 +4,14 @@ import re
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from urllib.parse import urljoin, urlparse
-
-from flask import redirect, request, url_for, abort, flash
-from flask_login import current_user
 from functools import wraps
+from urllib.parse import urljoin, urlparse
+import base64
+import httplib2
+from apiclient import discovery
+from flask import abort, flash, redirect, request, url_for
+from flask_login import current_user
+
 from config import Config
 
 VALID_USERNAME = re.compile(r"^[A-Za-z_][A-Za-z\d_]*$")
@@ -53,17 +56,33 @@ def redirect_back(endpoint, **values):
     return redirect(target)
 
 
-def send_email(recipient, subject, body, from_addr="example@exmaple.org"):
-    server = smtplib.SMTP("smtp.gmail.com", 587)
-    server.starttls()
+def create_message(recipient, subject, body, from_addr):
+    message = MIMEText(body)
+    message["to"] = recipient
+    message["from"] = from_addr
+    message["subject"] = subject
+    return dict(raw=base64.urlsafe_b64encode(message.as_string()))
+
+
+def send_email(recipient, subject, body, from_addr="sasemail@umn.edu"):
+    # server = smtplib.SMTP("smtp.gmail.com", 587)
+    # server.starttls()
+    # server.login(*credentials)
+
+    # msg = MIMEMultipart()
+    # msg["From"] = from_addr
+    # msg["To"] = recipient
+    # msg["Subject"] = subject
+    # msg.attach(MIMEText(body, "plain"))
+    # server.sendmail(from_addr, recipient, msg.as_string())
+
+    message = create_message(recipient, subject, body, from_addr)
+
     credentials = Config.get_email_credentials()
     if not credentials:
-        return
-    server.login(*credentials)
+        return  # TODO don't fail silently.
+    http = credentials.authorize(httplib2.Http())
+    service = discovery.build("gmail", "v1", http=http)
 
-    msg = MIMEMultipart()
-    msg["From"] = from_addr
-    msg["To"] = recipient
-    msg["Subject"] = subject
-    msg.attach(MIMEText(body, "plain"))
-    server.sendmail(from_addr, recipient, msg.as_string())
+    result = service.users().messages().send(userId=from_addr, message=message).execute()
+    return result

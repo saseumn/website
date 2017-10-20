@@ -1,6 +1,11 @@
 import os
 import sys
-import logging
+
+from oauth2client import client, tools
+from oauth2client.file import Storage
+
+
+SCOPES = "https://www.googleapis.com/auth/gmail.send"
 
 
 class Config(object):
@@ -48,8 +53,16 @@ class Config(object):
 
     @staticmethod
     def get_email_credentials():
-        gmail_username = os.getenv("GMAIL_USERNAME")
-        gmail_password = os.getenv("GMAIL_PASSWORD")
-        if not (gmail_username and gmail_password):
+        credentials_path = os.getenv("GMAIL_CREDENTIAL_FILE")
+        if not credentials_path:
             return False
-        return (gmail_username, gmail_password)
+        store = Storage(credentials_path)
+        credentials = store.get()
+        if not credentials or credentials.invalid:
+            client_secret_path = os.getenv("GMAIL_CLIENT_SECRET")
+            if not client_secret_path:
+                return False
+            flow = client.flow_from_clientsecrets(client_secret_path, SCOPES)
+            flow.user_agent = "SASE UMN Website"
+            credentials = tools.run_flow(flow, store)
+        return credentials
