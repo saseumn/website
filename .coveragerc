@@ -1,0 +1,6 @@
+[run]
+omit =
+    conftest.py
+    manage.py
+    .virtualenv/*
+    saseumn/tests/*
