@@ -44,7 +44,7 @@ def login():
         login_user(user)
         flash("Successfully logged in!", "success")
         return redirect_back("base.index")
-    return render_template("users/login.j2", login_form=login_form, next=redirect_to)
+    return render_template("users/login.html", login_form=login_form, next=redirect_to)
 
 
 @blueprint.route("/logout")
@@ -78,7 +78,7 @@ def register(evtkey=None):
             return redirect(url_for("users.register", evtkey=evtkey))
         else:
             return redirect(url_for("users.login"))
-    return render_template("users/register.j2", event=event, register_form=register_form)
+    return render_template("users/register.html", event=event, register_form=register_form)
 
 
 @blueprint.route("/password/forgot", methods=["GET", "POST"])
@@ -93,7 +93,7 @@ def forgot():
             send_email(forgot_form.email.data, "SASE UMN Account Password Reset", "Click here to reset your password: %s" % url)
         flash("If you have an email registered with us, then you should have received an email. Check your inbox now!", "success")
         return redirect(url_for("users.forgot"))
-    return render_template("users/forgot.j2", forgot_form=forgot_form)
+    return render_template("users/forgot.html", forgot_form=forgot_form)
 
 
 @blueprint.route("/password/reset/<string:code>", methods=["GET", "POST"])
@@ -111,7 +111,7 @@ def reset(code):
         db.session.commit()
         flash("Password has been reset! Try logging in now.", "success")
         return redirect(url_for("users.login"))
-    return render_template("users/reset.j2", reset_form=reset_form)
+    return render_template("users/reset.html", reset_form=reset_form)
 
 
 @blueprint.route("/profile")
@@ -122,7 +122,7 @@ def profile(id=None):
     user = User.get_by_id(id)
     if user is None:
         abort(404)
-    return render_template("users/profile.j2", user=user)
+    return render_template("users/profile.html", user=user)
 
 
 @blueprint.route("/settings", methods=["GET", "POST"])
@@ -148,7 +148,7 @@ def settings():
         for field in profile_edit_form:
             if hasattr(current_user, field.short_name):
                 field.data = getattr(current_user, field.short_name, "")
-    return render_template("users/settings.j2",
+    return render_template("users/settings.html",
                            change_password_form=change_password_form,
                            profile_edit_form=profile_edit_form)
 

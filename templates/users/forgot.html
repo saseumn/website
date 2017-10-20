@@ -1,6 +1,6 @@
-{% from "templates.j2" import render_field, render_generic_field %}
-{% extends "layout.j2" %}
-{% block title %}Reset Password{% endblock %}
+{% from "templates.html" import render_field, render_generic_field %}
+{% extends "layout.html" %}
+{% block title %}Forgot Password{% endblock %}
 
 {% block content %}
     <div class="section">
@@ -9,16 +9,15 @@
                 <div class="col-md-6 col-md-offset-3 col-sm-10 col-sm-offset-1">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h2 class="panel-title">Reset Password</h2>
+                            <h2 class="panel-title">Forgot Password</h2>
                         </div>
                         <div class="panel-body">
                             <form method="POST">
-                                {{ reset_form.csrf_token }}
+                                {{ forgot_form.csrf_token }}
                                 <fieldset>
-                                    {{ render_field(reset_form.password) }}
-                                    {{ render_field(reset_form.confirm_password) }}
+                                    {{ render_field(forgot_form.email) }}
                                 </fieldset>
-                                {{ reset_form.submit(class_="btn btn-primary") }}
+                                {{ forgot_form.submit(class_="btn btn-primary") }}
                             </form>
                         </div>
                     </div>
