@@ -14,6 +14,10 @@ class SecuredHomeView(AdminIndexView):
             return True
         return False
 
+    @expose("/")
+    def index(self):
+        return self.render("admin/index.html")
+
 
 class GenericView(ModelView):
     def is_accessible(self):

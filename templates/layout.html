@@ -1,122 +1,23 @@
 {% from "templates.html" import flashes %}
-<!DOCTYPE html>
+<!doctype html>
 <html>
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/yeti/bootstrap.min.css" rel="stylesheet" integrity="sha384-HzUaiJdCTIY/RL2vDPRGdEQHHahjzwoJJzGUkYjHVzTwXFQ2QN/nVgX7tzoMW3Ov" crossorigin="anonymous">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    <link href="/static/css/main.css" rel="stylesheet" />
-    <link href="/static/img/logo.png" rel="icon" />
+    {% include "layout/head.html" %}
     <title>
         {% block title %}{% endblock %} - SASE UMN
     </title>
 </head>
 
 <body>
-    <nav class="navbar navbar-default" style="margin-bottom: 0;">
-        <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="{{ url_for("base.index") }}">
-                    <img style="height: 24px; vertical-align: middle; display:inline-block;" src="/static/img/logo.png" />
-                    SASE UMN
-                </a>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li><a href="{{ url_for("base.about") }}">About</a></li>
-                    <li><a href="{{ url_for("base.events") }}">Events</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    {% if current_user.is_authenticated %}
-                        {% if current_user.admin %}
-                            <li><a href="{{ url_for("admin.index") }}">Admin Panel</a></li>
-                        {% endif %}
-                        <li class="dropdown">
-                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                {{ current_user.username }}&nbsp;<span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ url_for("users.profile") }}"><i class="fa fa-fw fa-user"></i> My Profile</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="{{ url_for("users.settings") }}"><i class="fa fa-fw fa-sliders"></i> Account Settings</a></li>
-                                <li><a href="{{ url_for("users.logout") }}"><i class="fa fa-fw fa-sign-out"></i> Logout</a></li>
-                            </ul>
-                        </li>
-                    {% else %}
-                        <li><a href="{{ url_for("users.login") }}">Login</a></li>
-                        <li><a href="{{ url_for("users.register") }}">Register</a></li>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
-    </nav>
+    {% include "layout/navbar.html" %}
     <div style="margin-bottom: 21px;">
         {{ flashes() }}
     </div>
-    <div style="min-height: 80vh;">
+    <div style="min-height: 70vh;">
         {% block content %}{% endblock %}
     </div>
-    <footer class="site-footer site-footer--sticky">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-4">
-                    <h5 class="footer-heading">SASE UMN</h5>
-                    <p>
-                        SASE UMN is a student organization at the University of Minnesota that is dedicated to the advancement of Asian heritage scientists and engineers in education and employment so that they can achieve their full career potential.
-                    </p>
-                    <ul class="list-inline">
-                    </ul>
-                </div>
-                <div class="col-sm-8">
-                    <div class="row">
-                        <div class="col-xs-4">
-                            <h5 class="footer-heading">Useful Links</h5>
-                            <ul>
-                                <li><a href="{{ url_for("base.index") }}">Home</a></li>
-                                <li><a href="{{ url_for("base.about") }}">About</a></li>
-                                <li><a href="{{ url_for("base.events") }}">Events</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-xs-8">
-                            <h5 class="footer-heading">Connect With Us</h5>
-                            <p>
-                                Stop by our office at 
-                                <br>
-                                <br>
-                                Lind Hall 102<br>
-                                207 Church St SE,<br>
-                                Minneapolis, MN 55455
-                                <br>
-                                <br>
-                                Or follow us on social media platforms:
-                            </p>
-                            <p id="links">
-                                <a href="mailto:sasemail@umn.edu" target="_blank" rel="noopener"><i class="fa fa-fw fa-2x fa-envelope"></i></a>
-                                <a href="https://www.facebook.com/sase.umn/" target="_blank" rel="noopener"><i class="fa fa-fw fa-2x fa-facebook-square"></i></a>
-                                <a href="https://twitter.com/sase.umn/" target="_blank" rel="noopener"><i class="fa fa-fw fa-2x fa-twitter"></i></a>
-                                <a href="https://www.instagram.com/saseumn/" target="_blank" rel="noopener"><i class="fa fa-fw fa-2x fa-instagram"></i></a>
-                                <a href="https://www.youtube.com/user/saseumn/" target="_blank" rel="noopener"><i class="fa fa-fw fa-2x fa-youtube-play"></i></a>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row footer-copyright">
-                <p>
-                    &copy; 2017 SASE UMN. This website is open-source on <a href="https://github.com/saseumn/website" target="_blank">Github</a>.
-                </p>
-            </div>
-    </footer>
+    {% include "layout/footer.html" %}
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </body>

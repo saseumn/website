@@ -15,7 +15,7 @@ security = None
 admin_role = None
 board_role = None
 
-admin = Admin()
+admin = Admin(base_template="admin/base.html")
 
 
 def init_security(app, User, Role):
