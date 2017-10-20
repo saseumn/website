@@ -111,3 +111,12 @@ class User(db.Model, UserMixin):
 
     def get_id(self):
         return str(self.id)
+
+    # these are here to satisfy flask-security, we don't really need them yet
+    @property
+    def active(self):
+        return True
+
+    @active.setter
+    def active(self, value):
+        return

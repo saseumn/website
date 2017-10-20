@@ -15,6 +15,7 @@ from wtforms.validators import Email, EqualTo, InputRequired, Length
 from models import Event, PasswordResetToken, User, db
 from util import (VALID_USERNAME, get_redirect_target, random_string,
                   redirect_back, send_email)
+from objects import user_datastore
 
 blueprint = Blueprint("users", __name__, template_folder="templates")
 email_template = """
@@ -103,7 +104,6 @@ def reset(code):
     token = PasswordResetToken.query.filter_by(token=code, active=True).first()
     if not token or token.expired or token.email != token.user.email:
         redirect(url_for("base.index"))
-
     reset_form = PasswordResetForm()
     if reset_form.validate_on_submit():
         user = User.get_by_id(token.uid)
@@ -175,18 +175,11 @@ def verify(token):
 
 
 def register_user(name, email, username, password, admin=False, **kwargs):
-    new_user = User(name=name, username=username,
-                    password=password, email=email)
-
-    for key, value in kwargs.items():
-        setattr(new_user, key, value)
     code = random_string()
-    new_user.email_verification_token = code
+    new_user = user_datastore.create_user(name=name, username=username, password=password, email=email, email_verification_token=code)
     if not current_app.config.get("EMAIL_VERIFICATION_DISABLED", False):
         send_verification_email(username, email, url_for("users.verify", token=code, _external=True))
-    db.session.add(new_user)
     db.session.commit()
-
     return new_user
 
 
