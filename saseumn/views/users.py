@@ -12,10 +12,10 @@ from wtforms.fields import (BooleanField, PasswordField, StringField,
                             SubmitField)
 from wtforms.validators import Email, EqualTo, InputRequired, Length
 
-from models import Event, PasswordResetToken, User, db
-from util import (VALID_USERNAME, get_redirect_target, random_string,
-                  redirect_back, send_email)
-from objects import user_datastore
+from saseumn.models import Event, PasswordResetToken, User, db
+from saseumn.objects import user_datastore
+from saseumn.util import (VALID_USERNAME, get_redirect_target, random_string,
+                          redirect_back, send_email)
 
 blueprint = Blueprint("users", __name__, template_folder="templates")
 email_template = """

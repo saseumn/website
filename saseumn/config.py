@@ -6,25 +6,32 @@ import logging
 class Config(object):
     """ Configuration for the Flask object based on environment variables. """
 
-    def __init__(self):
+    def __init__(self, testing=False):
+        self.port = int(os.getenv("PORT", "7400"))
+
+        self.SECRET_KEY = Config.get_secret_key()
+        self.SQLALCHEMY_TRACK_MODIFICATIONS = True
+
+        # Flask-Admin
+        self.SECURITY_URL_PREFIX = os.getenv("SECURITY_URL_PREFIX", "/admin")
+
         # ENVIRONMENT = { development | testing | production }
         self.ENVIRONMENT = os.getenv("ENVIRONMENT", "production")  # secure by defualt
+
         if self.ENVIRONMENT.lower() == "development":
             self.DEBUG = True
             self.EMAIL_VERIFICATION_DISABLED = True
             self.TEMPLATES_AUTO_RELOAD = True
 
-        self.port = int(os.getenv("PORT", "7400"))
-
-        # Secret Key
-        self.SECRET_KEY = Config.get_secret_key()
-
-        # Database URL
-        self.SQLALCHEMY_DATABASE_URI = Config.get_database_url()
-        self.SQLALCHEMY_TRACK_MODIFICATIONS = True
-
-        # Flask-Admin
-        self.SECURITY_URL_PREFIX = os.getenv("SECURITY_URL_PREFIX", "/admin")
+        if testing or self.ENVIRONMENT.lower() == "testing":
+            self.DEBUG = True
+            self.EMAIL_VERIFICATION_DISABLED = True
+            self.SERVER_NAME = "localhost"
+            self.SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
+            self.TESTING = True
+            self.WTF_CSRF_ENABLED = False
+        else:
+            self.SQLALCHEMY_DATABASE_URI = Config.get_database_url()
 
     @staticmethod
     def get_database_url():

@@ -9,6 +9,7 @@ flask-sqlalchemy
 flask-wtf
 mysqlclient
 passlib
+pytest
 sqlalchemy
 rauth
 wtforms
