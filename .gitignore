@@ -1,5 +1,5 @@
 # Visual Studio Code
-.vscode/*
+.vscode
 
 # Python Virtual Environment
 .virtualenv
@@ -16,3 +16,4 @@ sase.db
 
 # Coverage
 .coverage
+.cache
