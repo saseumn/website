@@ -4,12 +4,13 @@ import re
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from functools import wraps
 from urllib.parse import urljoin, urlparse
 
-from flask import redirect, request, url_for, abort, flash
+from flask import abort, flash, redirect, request, url_for
 from flask_login import current_user
-from functools import wraps
-from config import Config
+
+from saseumn.config import Config
 
 VALID_USERNAME = re.compile(r"^[A-Za-z_][A-Za-z\d_]*$")
 

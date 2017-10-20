@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from flask import Blueprint, render_template
 from sqlalchemy import and_
 
-from models import Event
+from saseumn.models import Event
 
 blueprint = Blueprint("base", __name__)
 

@@ -3,7 +3,7 @@ from flask_admin import AdminIndexView, expose
 from flask_admin.contrib.sqla import ModelView
 from flask_security import current_user
 
-from models import Event, Role, User
+from saseumn.models import Event, Role, User
 
 superuser_role = "Webmaster"
 

@@ -5,9 +5,9 @@ from passlib.hash import bcrypt
 from sqlalchemy.ext.hybrid import hybrid_property
 from flask_security import UserMixin, RoleMixin
 
-from objects import login_manager
-from objects import db
-from util import random_string
+from saseumn.objects import login_manager
+from saseumn.objects import db
+from saseumn.util import random_string
 
 attendance = db.Table("attendance", db.Model.metadata,
                       db.Column("user_id", db.Integer, db.ForeignKey("users.id")),

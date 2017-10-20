@@ -13,3 +13,6 @@ sase.db
 
 # SEcret stuff!
 .env
+
+# Coverage
+.coverage

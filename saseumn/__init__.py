@@ -4,17 +4,19 @@ import sys
 from flask import Flask, url_for
 from flask_admin import helpers as admin_helpers
 
-from admin import SecuredHomeView
-from config import Config
-from models import Role, User
-from objects import admin, db, init_security, login_manager
+from saseumn.admin import SecuredHomeView, RoleView, EventView, UserView
+from saseumn.config import Config
+from saseumn.models import Role, User
+from saseumn.objects import admin, db, init_security, login_manager
 
 
-def make_app(config=None):
+def make_app(config=None, testing=None):
     """ Returns a Flask object ready to serve the website. """
 
     if not config:
-        config = Config()
+        if not testing:
+            testing = False
+        config = Config(testing=testing)
 
     # Create a Flask app object.
     app = Flask(__name__)
@@ -32,6 +34,8 @@ def make_app(config=None):
     login_manager.init_app(app)
     security = init_security(app, User, Role)
 
+    app.db = db
+
     @security.context_processor
     def security_context_processor():
         return dict(
@@ -42,13 +46,12 @@ def make_app(config=None):
         )
 
     # Admin stuff
-    import admin as admin_views
-    admin.add_view(admin_views.RoleView(db.session))
-    admin.add_view(admin_views.EventView(db.session))
-    admin.add_view(admin_views.UserView(db.session))
+    admin.add_view(RoleView(db.session))
+    admin.add_view(EventView(db.session))
+    admin.add_view(UserView(db.session))
 
     # Register endpoints.
-    import views
+    import saseumn.views as views
     app.register_blueprint(views.base.blueprint)
     app.register_blueprint(views.users.blueprint, url_prefix="/users")
 
