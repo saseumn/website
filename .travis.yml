@@ -1,6 +1,8 @@
 language: python
 python:
   - '3.6'
+env:
+  - SECRET_KEY=secret
 install:
   - pip install -r requirements.txt
   - pip install coverage pylint
