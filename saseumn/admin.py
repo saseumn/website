@@ -48,7 +48,7 @@ class EventView(GenericView):
 
 
 class UserView(GenericView):
-    column_exclude_list = ("password", )
+    column_exclude_list = ("_password", "email_verification_token")
 
     def __init__(self, session):
         super().__init__(User, session)
