@@ -58,11 +58,7 @@ def logout():
 
 
 @blueprint.route("/register", methods=["GET", "POST"])
-@blueprint.route("/register/<string:evtkey>", methods=["GET", "POST"])
-def register(evtkey=None):
-    event = None
-    if evtkey is not None:
-        event = Event.query.filter_by(registration_key=evtkey).first()
+def register():
     if current_user.is_authenticated:
         return redirect(url_for("base.index"))
     register_form = RegisterForm(prefix="register")
@@ -72,16 +68,37 @@ def register(evtkey=None):
                                  register_form.username.data,
                                  register_form.password.data,
                                  admin=False)
-        if event:
-            event.attendees.append(new_user)
-            db.session.add(event)
-            db.session.commit()
         flash("Check your email for an activation link.", "info")
-        if event:
-            return redirect(url_for("users.register", evtkey=evtkey))
-        else:
-            return redirect(url_for("users.login"))
-    return render_template("users/register.html", event=event, register_form=register_form)
+        return redirect(url_for("users.login"))
+    return render_template("users/register.html", register_form=register_form)
+
+
+@blueprint.route("/checkin/<string:evtkey>", methods=["GET", "POST"])
+def checkin(evtkey):
+    event = None
+    if evtkey is not None:
+        event = Event.query.filter_by(registration_key=evtkey).first()
+    login_form = LoginForm(remember=True)
+    register_form = RegisterForm(prefix="register")
+    if login_form.submit.data and login_form.validate_on_submit():
+        user = login_form.get_user()
+        event.attendees.append(user)
+        db.session.add(event)
+        db.session.commit()
+        flash("Thanks for checking in!", "success")
+        return redirect_back("users.checkin", evtkey=evtkey)
+    if register_form.submit.data and register_form.validate_on_submit():
+        new_user = register_user(register_form.name.data,
+                                 register_form.email.data,
+                                 register_form.username.data,
+                                 register_form.password.data,
+                                 admin=False)
+        event.attendees.append(new_user)
+        db.session.add(event)
+        db.session.commit()
+        flash("Check your email for an activation link.", "info")
+        return redirect(url_for("users.checkin", evtkey=evtkey))
+    return render_template("users/checkin.html", event=event, login_form=login_form, register_form=register_form)
 
 
 @blueprint.route("/password/forgot", methods=["GET", "POST"])

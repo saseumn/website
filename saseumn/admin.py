@@ -43,6 +43,8 @@ class RoleView(GenericView):
 
 
 class EventView(GenericView):
+    column_list = ("name", "location", "published", "start_time", "registration_link")
+
     def __init__(self, session):
         super().__init__(Event, session)
 

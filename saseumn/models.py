@@ -63,7 +63,7 @@ class Event(db.Model):
 
     @property
     def registration_link(self):
-        return url_for("users.register", evtkey=self.registration_key, _external=True)
+        return url_for("users.checkin", evtkey=self.registration_key, _external=True)
 
 
 class User(db.Model, UserMixin):
