@@ -1,0 +1,25 @@
+{% from "templates.html" import flashes %}
+<!doctype html>
+<html>
+
+<head>
+    {% include "layout/head.html" %}
+    <title>
+        {% block title %}{% endblock %} - SASE UMN
+    </title>
+</head>
+
+<body>
+    {% include "layout/navbar.html" %}
+    <div style="margin-bottom: 21px;">
+        {{ flashes() }}
+    </div>
+    <div style="min-height: 70vh;">
+        {% block content %}{% endblock %}
+    </div>
+    {% include "layout/footer.html" %}
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</body>
+
+</html>

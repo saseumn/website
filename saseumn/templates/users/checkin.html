@@ -1,0 +1,73 @@
+{% from "templates.html" import render_field, render_generic_field %}
+{% extends "layout.html" %}
+{% block title %}Check in to {{ event.name }}{% endblock %}
+
+{% block content %}
+    <div class="section">
+        <div class="container">
+            <div class="row">
+                <div class="jumbotron">
+                    <center>
+                        <h2 style="margin: 0;">{{ event.name }}</h2>
+                    </center>
+                </div>
+                <div class="alert alert-info">
+                    After you confirm your email, you will automatically be marked as an attendee of <b>{{ event.name }}</b>.
+                </div>
+                <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">Login</h2>
+                        </div>
+                        <div class="list-group">
+                            <div class="list-group-item">
+                                <form method="POST">
+                                    {{ login_form.csrf_token }}
+                                    <fieldset>
+                                        {{ render_field(login_form.username) }}
+                                        {{ render_field(login_form.password) }}
+                                        <div class="form-group">
+                                            {{ login_form.remember(autocomplete="off") }}
+                                            {{ login_form.remember.label(class_="control-label") }}
+                                        </div>
+                                    </fieldset>
+                                    {{ login_form.submit(class_="btn btn-primary") }}
+                                    <input type="hidden" name="next" value="{{ next or '' }}"/>
+                                    <a href="{{ url_for("users.forgot") }}" class="btn btn-sm btn-default">Forgot Password</a>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">Register</h2>
+                        </div>
+                        <div class="list-group">
+                            <div class="list-group-item">
+                                <form method="POST">
+                                    {{ register_form.csrf_token }}
+                                    <fieldset>
+                                        {{ render_field(register_form.name) }}
+                                        {{ render_field(register_form.email) }}
+                                        {{ render_field(register_form.username) }}
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                {{ render_field(register_form.password) }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                {{ render_field(register_form.confirm_password) }}
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    {{ register_form.submit(class_="btn btn-primary") }}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

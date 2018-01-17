@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block title %}Events{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 style="text-align: center;">
+            Events
+        </h1>
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1" style="margin-bottom: 2em;">
+                {% if events %}
+                    <div class="panel panel-default timeline-item-inner" style="margin-bottom: 0;">
+                        <div class="panel-body">
+                            <div style="font-variant: small-caps">{{ events[0].start_time.strftime("%B %-d, %Y at %-I:%M %p") }}</div>
+                            <h3 style="margin: 0;">{{ events[0].name }}</h3>
+                            <hr />
+                            {{ events[0].description }}
+                        </div>
+                    </div>
+                    {% if events | length > 1 %}
+                        <div class="timeline">
+                            <div class="timeline-path"></div>
+                            <div class="timeline-item--offset"></div>
+                            {% for event in events[1:] %}
+                                <div class="timeline-item timeline-item--{{ "odd" if loop.index % 2 == 1 else "even" }}">
+                                    <div class="timeline-item-node"></div>
+                                    <a href="javascript:void(0);" class="panel panel-default timeline-item-inner">
+                                        <div class="panel-body">
+                                            <div style="font-variant: small-caps">{{ event.start_time.strftime("%B %-d, %Y at %-I:%M %p") }}</div>
+                                            <h3 style="margin: 0;">{{ event.name }}</h3>
+                                            <hr />
+                                            {{ event.description }}
+                                        </div>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

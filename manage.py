@@ -1,8 +1,8 @@
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager, Server
 
-from main import make_app
-from models import db
+from saseumn import make_app
+from saseumn.models import db
 
 app = make_app()
 manager = Manager(app)
