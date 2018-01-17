@@ -30,6 +30,7 @@
                             {{ current_user.username }}&nbsp;<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="{{ url_for("users.profile") }}"><i class="fa fa-fw fa-user"></i> My Profile</a></li>
+                            <li><a href="{{ url_for("users.resumes") }}"><i class="fa fa-fw fa-file-text"></i> My Resumes</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="{{ url_for("users.settings") }}"><i class="fa fa-fw fa-sliders"></i> Account Settings</a></li>
                             <li><a href="{{ url_for("users.logout") }}"><i class="fa fa-fw fa-sign-out"></i> Logout</a></li>

@@ -1,4 +1,5 @@
 import logging
+import time
 import sys
 
 from flask import Flask, url_for
@@ -27,6 +28,10 @@ def make_app(config=None, testing=None):
         if app.config.get("ENVIRONMENT") == "production":
             response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
         return response
+
+    @app.template_filter("to_timestamp")
+    def to_timestamp(d):
+        return int(time.mktime(d.timetuple()))
 
     # Initialize
     admin.init_app(app, index_view=SecuredHomeView(url="/admin"))

@@ -11,6 +11,10 @@ __pycache__
 # Database file.
 sase.db
 
+# Uploads folder
+saseumn/uploads/*
+!saseumn/uploads/.gitkeep
+
 # SEcret stuff!
 .env
 
