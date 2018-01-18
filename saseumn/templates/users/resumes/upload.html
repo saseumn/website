@@ -1,0 +1,37 @@
+{% from "templates.html" import render_field, render_generic_field %}
+{% extends "layout.html" %}
+{% block title %}Upload a R&#233;sum&#233;{% endblock %}
+
+{% block content %}
+    <div class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 col-sm-10 col-sm-offset-1">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div style="float: right;">
+                                <a href="{{ url_for('users.resumes') }}">&laquo; back</a>
+                            </div>
+                            <h2 class="panel-title">Upload a R&#233;sum&#233;</h2>
+                        </div>
+                        <div class="panel-body">
+                            <form method="POST" enctype="multipart/form-data">
+                                <input type="file" accept="application/pdf" name="resume" style="display: inline;" />
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-upload"></i> Upload
+                                </button>
+                            </form>
+                        </div>
+                        <div class="panel-footer">
+                            Upload requirements:
+                            <ul>
+                                <li>Max filesize is 8 MB.</li>
+                                <li>Only accepted file type is PDF.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

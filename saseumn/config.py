@@ -18,6 +18,8 @@ class Config(object):
         # ENVIRONMENT = { development | testing | production }
         self.ENVIRONMENT = os.getenv("ENVIRONMENT", "production")  # secure by defualt
 
+        self.UPLOADS_DIRECTORY = self.get_uploads_directory()
+
         if self.ENVIRONMENT.lower() == "development":
             self.DEBUG = True
             self.EMAIL_VERIFICATION_DISABLED = True
@@ -61,3 +63,11 @@ class Config(object):
         if not (gmail_username and gmail_password):
             return False
         return (gmail_username, gmail_password)
+
+    @staticmethod
+    def get_uploads_directory():
+        parent = os.path.dirname(os.path.realpath(__file__))
+        path = os.getenv("UPLOADS_DIRECTORY", os.path.join(parent, "uploads"))
+        if not os.path.exists(path):
+            os.makedirs(path)
+        return path

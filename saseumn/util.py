@@ -5,6 +5,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from functools import wraps
+import hashlib
 from urllib.parse import urljoin, urlparse
 
 from flask import abort, flash, redirect, request, url_for
@@ -52,6 +53,12 @@ def redirect_back(endpoint, **values):
     if not target or not is_safe_url(target):
         target = url_for(endpoint, **values)
     return redirect(target)
+
+
+def hash_file(file, algorithm=hashlib.sha256):
+    # file is a file-like object
+    contents = file.read()
+    return algorithm(contents).hexdigest()
 
 
 def send_email(recipient, subject, body, from_addr="example@exmaple.org"):
