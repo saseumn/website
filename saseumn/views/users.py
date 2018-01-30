@@ -162,6 +162,18 @@ def resumes(id=None):
     return render_template("users/resumes/index.html")
 
 
+@blueprint.route("/resumes/edit/<int:id>")
+@login_required
+def resumes_edit(id):
+    resume = db.session.query(Resume).get(id)
+    if not resume:
+        return abort(404)
+    # TODO: actual permissions system
+    if resume.user.id != current_user.id:
+        return abort(403)
+    return render_template("")
+
+
 @blueprint.route("/resumes/upload", methods=["GET", "POST"])
 @login_required
 def resumes_upload():
@@ -177,7 +189,7 @@ def resumes_upload():
         resume = Resume(name=f.filename, hashed=h, user_id=current_user.id)
         db.session.add(resume)
         db.session.commit()
-        return redirect(url_for("users.resumes"))
+        return redirect(url_for("users.resumes_edit", id=resume.id))
     return render_template("users/resumes/upload.html")
 
 

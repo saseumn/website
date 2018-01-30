@@ -24,6 +24,7 @@
                                     <tr>
                                         <td>Name</td>
                                         <td>Date Created</td>
+                                        <td></td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -33,6 +34,9 @@
                                             <a href="{{ url_for('users.resumes', id=resume.id) }}" target="_blank">{{ resume.name }}</a>
                                         </td>
                                         <td><span data-livestamp="{{ resume.date_created | to_timestamp }}">{{ resume.date_created }}</span></td>
+                                        <td>
+                                            <a href="{{ url_for('users.resumes_edit', id=resume.id) }}"><i class="fa fa-pencil"></i> Edit</a>
+                                        </td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
