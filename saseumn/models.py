@@ -13,7 +13,7 @@ attendance = db.Table("attendance", db.Model.metadata,
                       db.Column("user_id", db.Integer, db.ForeignKey("users.id")),
                       db.Column("event_id", db.Integer, db.ForeignKey("events.id")))
 
-roles_users = db.Table("roles_users",
+roles_users = db.Table("roles_users", db.Model.metadata,
                        db.Column("user_id", db.Integer(), db.ForeignKey("users.id")),
                        db.Column("role_id", db.Integer(), db.ForeignKey("roles.id")))
 
@@ -66,6 +66,24 @@ class Event(db.Model):
         return url_for("users.checkin", evtkey=self.registration_key, _external=True)
 
 
+class Resume(db.Model):
+    __tablename__ = "resumes"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Unicode(32))
+    hashed = db.Column(db.Unicode(64))
+
+    date_created = db.Column(db.DateTime, default=datetime.now)
+    date_updated = db.Column(db.DateTime, default=datetime.now)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+
+
+class ResumePermission(db.Model):
+    __tablename__ = "resume_permissions"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+
 class User(db.Model, UserMixin):
     __tablename__ = "users"
 
@@ -78,7 +96,9 @@ class User(db.Model, UserMixin):
     email_verification_token = db.Column(db.String(256), index=True)
     _register_time = db.Column("register_time", db.DateTime, default=datetime.now)
     _password = db.Column("password", db.String(256))
+
     roles = db.relationship("Role", secondary=roles_users, backref=db.backref("users", lazy="dynamic"))
+    resumes = db.relationship("Resume", backref="user", lazy=True)
 
     @hybrid_property
     def admin(self):

@@ -1,0 +1,46 @@
+{% from "templates.html" import render_field, render_generic_field %}
+{% extends "layout.html" %}
+{% block title %}R&#233;sum&#233;s{% endblock %}
+
+{% block content %}
+    <div class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 col-sm-10 col-sm-offset-1">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div style="float: right;">
+                                <a href="{{ url_for('users.resumes_upload') }}">Add a r&#233;sum&#233;</a>
+                            </div>
+                            <h2 class="panel-title">R&#233;sum&#233;s</h2>
+                        </div>
+                        {% if current_user.resumes | length == 0 %}
+                            <div class="panel-body">
+                                You don't have any resumes yet! Click the link above to add one!
+                            </div>
+                        {% else %}
+                            <table class="table table-striped table-border">
+                                <thead>
+                                    <tr>
+                                        <td>Name</td>
+                                        <td>Date Created</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for resume in current_user.resumes %}
+                                    <tr>
+                                        <td>
+                                            <a href="{{ url_for('users.resumes', id=resume.id) }}" target="_blank">{{ resume.name }}</a>
+                                        </td>
+                                        <td><span data-livestamp="{{ resume.date_created | to_timestamp }}">{{ resume.date_created }}</span></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

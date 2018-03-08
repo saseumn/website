@@ -1,21 +1,23 @@
+import os
 import string
 from datetime import datetime, timedelta
 
 from flask import (Blueprint, abort, current_app, flash, redirect,
-                   render_template, url_for)
+                   render_template, request, url_for, send_file)
 from flask_security import (current_user, login_required, login_user,
                             logout_user)
 from flask_wtf import FlaskForm
 from sqlalchemy import func, or_
+from werkzeug.utils import secure_filename
 from wtforms import ValidationError
 from wtforms.fields import (BooleanField, PasswordField, StringField,
                             SubmitField)
 from wtforms.validators import Email, EqualTo, InputRequired, Length
 
-from saseumn.models import Event, PasswordResetToken, User, db
+from saseumn.models import Event, PasswordResetToken, Resume, User, db
 from saseumn.objects import user_datastore
-from saseumn.util import (VALID_USERNAME, get_redirect_target, random_string,
-                          redirect_back, send_email)
+from saseumn.util import (VALID_USERNAME, get_redirect_target, hash_file,
+                          random_string, redirect_back, send_email)
 
 blueprint = Blueprint("users", __name__, template_folder="templates")
 email_template = """
@@ -142,6 +144,41 @@ def profile(id=None):
     if user is None:
         abort(404)
     return render_template("users/profile.html", user=user)
+
+
+@blueprint.route("/resumes")
+@blueprint.route("/resumes/view/<int:id>")
+@login_required
+def resumes(id=None):
+    if id is not None:
+        resume = db.session.query(Resume).get(id)
+        if not resume:
+            return abort(404)
+        # TODO: permissions here
+        path = os.path.join(current_app.config["UPLOADS_DIRECTORY"], resume.hashed)
+        if not os.path.exists(path):
+            return abort(404)
+        return send_file(path, attachment_filename=resume.name)
+    return render_template("users/resumes/index.html")
+
+
+@blueprint.route("/resumes/upload", methods=["GET", "POST"])
+@login_required
+def resumes_upload():
+    if request.method == "POST":
+        if not (request.files and "resume" in request.files):
+            flash("You did not upload a resume.", "danger")
+            return redirect(url_for("users.resumes_upload"))
+        f = request.files["resume"]
+        # TODO: validate type
+        h = hash_file(f)
+        f.seek(0)
+        f.save(os.path.join(current_app.config["UPLOADS_DIRECTORY"], h))
+        resume = Resume(name=f.filename, hashed=h, user_id=current_user.id)
+        db.session.add(resume)
+        db.session.commit()
+        return redirect(url_for("users.resumes"))
+    return render_template("users/resumes/upload.html")
 
 
 @blueprint.route("/settings", methods=["GET", "POST"])
