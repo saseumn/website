@@ -16,7 +16,8 @@ class Config(object):
         self.SECURITY_URL_PREFIX = os.getenv("SECURITY_URL_PREFIX", "/admin")
 
         # ENVIRONMENT = { development | testing | production }
-        self.ENVIRONMENT = os.getenv("ENVIRONMENT", "production")  # secure by defualt
+        self.ENVIRONMENT = os.getenv(
+            "ENVIRONMENT", "production")  # secure by defualt
 
         if self.ENVIRONMENT.lower() == "development":
             self.DEBUG = True

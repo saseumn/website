@@ -23,4 +23,37 @@
 
         <p>In 2007-08, Procter & Gamble Co. provided the initial membership contribution to establish SASE. P&G saw the opportunity to improve the recruiting, retention and development of Asian heritage scientists and engineers via a nationally recognized technical organization with student chapters on college campuses. In 2011 the University of Minnesota SASE chapter was founded with the intention of bringing the initiative from the national SASE chapter to our school. Since then, SASE UMN has created many programs and initiatives that have helped our members grow to become better leaders.</p>
     </div>
+
+    <div class="section gradient">
+        <div class="container">
+            <h1>Meet The Team</h1>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-10">
+                    <div class="card-columns">
+                        {% for member in team %}
+                            <div class="card">
+                                <div class="card-img-top text-center">
+                                    <img class="img-fluid" src="{% if member.avatar %}{{ member.avatar }}{% else %}https://placehold.it/400x400{% endif %}" alt="Card image cap">
+                                </div>
+                                <div class="card-block text-center">
+                                    <h4 class="card-title">{{ member.username }}
+                                        {% if member.name %}<br /><small style="color: lightgray;">{{ member.name }}</small>{% endif %}
+                                    </h4>
+                                    <p class="card-text">{{ member.role }}</p>
+                                </div>
+                                <div class="card-footer text-center">
+                                   {% if member.website %} <a href="{{ member.website }}" target="_blank"><i class="fa fa-fw fa-link"></i></a>{% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
