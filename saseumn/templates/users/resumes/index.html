@@ -34,7 +34,7 @@
                                         </td>
                                         <td><span data-livestamp="{{ resume.date_created | to_timestamp }}">{{ resume.date_created }}</span></td>
 					<td>
-					    <form method="post">
+					    <form method="post" action="{{ url_for('users.resumes_delete', id=resume.id) }}">
 			                        <button type="submit" name="delete" value="{{resume.id}}">Delete</button>
 					    </form>
 					</td>
