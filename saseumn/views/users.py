@@ -151,9 +151,7 @@ def profile(id=None):
 @login_required
 def resumes(id=None):
     if id is not None:
-        resume = db.session.query(Resume).get(id)
-        if not resume:
-            return abort(404)
+        resume = Resume.query.get_or_404(id)
         # Prevent viewing of other people's resumes
         # TODO: make a different route allowing employers to view resumes
         if resume.user_id != current_user.id:
