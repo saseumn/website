@@ -146,7 +146,7 @@ def profile(id=None):
     return render_template("users/profile.html", user=user)
 
 
-@blueprint.route("/resumes")
+@blueprint.route("/resumes", methods=["GET", "POST"])
 @blueprint.route("/resumes/view/<int:id>")
 @login_required
 def resumes(id=None):
@@ -159,6 +159,8 @@ def resumes(id=None):
         if not os.path.exists(path):
             return abort(404)
         return send_file(path, attachment_filename=resume.name)
+    if request.method == "POST":
+        db.session.query(Resume).filter(Resume.id==request.form.get("delete")).delete()
     return render_template("users/resumes/index.html")
 
 
