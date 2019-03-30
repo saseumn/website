@@ -25,7 +25,7 @@ def about():
             'website': 'example'
         },
         {
-            'username': 'IOexception',
+            'username': 'michael',
             'name': 'Michael Zhang',
             'role': 'Webmaster',
             'website': 'example'

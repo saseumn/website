@@ -1,0 +1,26 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+bcrypt = "*"
+mysqlclient = "*"
+passlib = "*"
+pytest = "*"
+rauth = "*"
+Flask = "*"
+Flask-Admin = "*"
+Flask-Login = "*"
+Flask-Migrate = "*"
+Flask-Script = "*"
+Flask-Security = "*"
+Flask-SQLAlchemy = "*"
+Flask-WTF = "*"
+SQLAlchemy = "*"
+WTForms = "*"
+
+[requires]
+python_version = "3.7"
