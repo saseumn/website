@@ -33,6 +33,11 @@
                                             <a href="{{ url_for('users.resumes', id=resume.id) }}" target="_blank">{{ resume.name }}</a>
                                         </td>
                                         <td><span data-livestamp="{{ resume.date_created | to_timestamp }}">{{ resume.date_created }}</span></td>
+					<td>
+					    <form method="post">
+			                        <button type="submit" name="delete" value="{{resume.id}}">Delete</button>
+					    </form>
+					</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
