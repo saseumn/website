@@ -165,7 +165,7 @@ def resumes(id=None):
     if request.method == "POST": # delete a resume
         resume_id = request.form.get("delete")
         if resume_id != None:
-            resume = db.session.query(Resume).filter(Resume.id==resume_id)).first()
+            resume = db.session.query(Resume).filter(Resume.id==resume_id).first()
             # Prevent deletion of other people's resumes
             if resume.user_id != current_user.id:
                 return abort(403)
