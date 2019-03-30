@@ -154,13 +154,23 @@ def resumes(id=None):
         resume = db.session.query(Resume).get(id)
         if not resume:
             return abort(404)
-        # TODO: permissions here
+        # Prevent viewing of other people's resumes
+        # TODO: make a different route allowing employers to view resumes
+        if resume.user_id != current_user.id:
+            return abort(403)
         path = os.path.join(current_app.config["UPLOADS_DIRECTORY"], resume.hashed)
         if not os.path.exists(path):
             return abort(404)
         return send_file(path, attachment_filename=resume.name)
-    if request.method == "POST":
-        db.session.query(Resume).filter(Resume.id==request.form.get("delete")).delete()
+    if request.method == "POST": # delete a resume
+        resume_id = request.form.get("delete")
+        if resume_id != None:
+            resume = db.session.query(Resume).filter(Resume.id==resume_id).first()
+            # Prevent deletion of other people's resumes
+            if resume.user_id != current_user.id:
+                return abort(403)
+            db.session.delete(resume)
+            db.session.commit()
     return render_template("users/resumes/index.html")
 
 
