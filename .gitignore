@@ -9,7 +9,8 @@ __pycache__
 *.pyc
 
 # Database file.
-sase.db
+/sase.db
+/test.db
 
 # Uploads folder
 saseumn/uploads/*
