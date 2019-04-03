@@ -16,22 +16,22 @@ def index():
 
 @blueprint.route("/about")
 def about():
-    team = [
-        {
-            'avatar': '/static/img/dev.jpg',
-            'username': 'Dist',
-            'name': 'Devin Deng',
-            'role': 'Webmaster',
-            'website': 'example'
-        },
-        {
-            'username': 'michael',
-            'name': 'Michael Zhang',
-            'role': 'Webmaster',
-            'website': 'example'
-        }
-    ]
-    return render_template("base/about.html", team=team)
+    # team = [
+    #     {
+    #         'avatar': '/static/img/dev.jpg',
+    #         'username': 'Dist',
+    #         'name': 'Devin Deng',
+    #         'role': 'Webmaster',
+    #         'website': 'example'
+    #     },
+    #     {
+    #         'username': 'michael',
+    #         'name': 'Michael Zhang',
+    #         'role': 'Webmaster',
+    #         'website': 'example'
+    #     }
+    # ]
+    return render_template("base/about.html")
 
 
 @blueprint.route("/events")
